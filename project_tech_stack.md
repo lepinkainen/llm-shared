@@ -19,10 +19,12 @@
 
 ### Libraries
 
-- if sqlite is used, use "modernc.org/sqlite" as the library (no dependency on cgo)
-- logging: "log/slog" (standard library)
-- configuration management: "github.com/spf13/viper"
-- command-line arguments: "github.com/spf13/cobra" (only if the project requires complex CLI)
+- Provide justification when adding new third-party dependencies. Keep dependencies updated.
+- Prefer using standard library packages when possible
+- If SQLite is used, use "modernc.org/sqlite" as the library (no dependency on cgo)
+- Logging: "log/slog" (standard library)
+- Configuration management: "github.com/spf13/viper"
+- Command-line arguments: "github.com/spf13/cobra" (only if the project requires complex CLI)
 
 ## General Guidelines
 
