@@ -1,0 +1,23 @@
+# Libraries to use
+
+## general
+
+- taskfile "taskfile.dev/task" (for task management instead of makefiles)
+  - should containt the following tasks:
+    - build
+    - build-linux
+    - build-ci (for building in CI)
+    - test
+    - test-ci (for build-ci tests)
+      - go test -tags=ci -cover -v ./...
+      - allow skipping tests with //go:build !ci
+    - lint
+    - build tasks need to depend on test and lint tasks
+
+## Go
+
+- if sqlite is used, use "modernc.org/sqlite" as the library (no dependency on cgo)
+- logging: "log/slog" (standard library)
+- configuration management: "github.com/spf13/viper"
+- command-line arguments: "github.com/spf13/cobra" (only if the project requires complex CLI)
+- Always run gofmt on the code before attempting to run it
