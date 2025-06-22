@@ -21,3 +21,4 @@
 - configuration management: "github.com/spf13/viper"
 - command-line arguments: "github.com/spf13/cobra" (only if the project requires complex CLI)
 - Always run gofmt on the code before attempting to run it
+- Always build the project using the taskfile before finishing a task
