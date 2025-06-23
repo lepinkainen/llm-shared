@@ -28,5 +28,5 @@
 
 ## General Guidelines
 
-- Always run gofmt on the code before attempting to run it
+- Always run "gofmt -w ." on the Go code files after making changes
 - Always build the project using the taskfile before finishing a task
