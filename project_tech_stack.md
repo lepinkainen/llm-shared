@@ -22,7 +22,8 @@
 - Provide justification when adding new third-party dependencies. Keep dependencies updated.
 - Prefer using standard library packages when possible
 - If SQLite is used, use "modernc.org/sqlite" as the library (no dependency on cgo)
-- Logging: "log/slog" (standard library)
+- Logging in applications run from cron: "log/slog" (standard library)
+- Logging in applications run from CLI: "fmt.Println" (standard library, use emojis for better UX)
 - Configuration management: "github.com/spf13/viper"
 - Command-line arguments: "github.com/spf13/cobra" (only if the project requires complex CLI)
 
