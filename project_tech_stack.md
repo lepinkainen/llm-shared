@@ -37,6 +37,5 @@
 ### Libraries
 
 - Use "uv" for dependency management (similar to pipenv)
-- Use "black" for code formatting
-- Use "flake8" for linting
+- Use "ruff" for linting and formatting
 - Use "mypy" for type checking as much as possible
