@@ -17,7 +17,7 @@
 
 ## Go
 
-### Libraries
+### Go Libraries
 
 - Provide justification when adding new third-party dependencies. Keep dependencies updated.
 - Prefer using standard library packages when possible
@@ -34,7 +34,7 @@
 
 ## Python
 
-### Libraries
+### Python Libraries
 
 - Use "uv" for dependency management (similar to pipenv)
 - Use "ruff" for linting and formatting
