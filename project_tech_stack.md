@@ -1,4 +1,19 @@
-# Libraries to use
+# Project Tech Stack and Guidelines
+
+- When analysing a large codebase that might exceed context limits, use the Gemini CLI
+- Use gemini -p when:
+  - Analysing entire codebases or large directories
+  - Comparing multiple large files
+  - Need to understand project-wide patterns or architecture
+  - Checking for presence of certain coding patterns or practices
+
+Examples:
+
+```bash
+gemini -p "@src/main.go Explain this file's purpose and functionality"
+gemini -p "@src/ Summarise the architecture of this codebase"
+gemini -p "@src/ Is the project test coverage on par with industry standards?"
+```
 
 ## Common project guidelines
 
@@ -17,6 +32,14 @@
 
 ## Go
 
+When looking for functions, use the `gofuncs` tool to list all functions in a Go project. It provides a compact format that is optimized for LLM context.
+
+- Example usage:
+
+  ```bash
+  go run gofuncs.go -dir /path/to/project
+  ```
+
 ### Go Libraries
 
 - Provide justification when adding new third-party dependencies. Keep dependencies updated.
@@ -33,6 +56,14 @@
 - Always build the project using the taskfile before finishing a task
 
 ## Python
+
+When looking for functions, use the `pyfuncs` tool to list all functions in a Python project. It provides a compact format that is optimized for LLM context.
+
+- Example usage:
+
+  ```bash
+  python pyfuncs.py --dir /path/to/project
+  ```
 
 ### Python Libraries
 
