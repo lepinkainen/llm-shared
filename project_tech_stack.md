@@ -115,7 +115,7 @@ When looking for functions, use the `jsfuncs` tool to list all functions in a Ja
 - **Environment**: dotenv for configuration
 - **Logging**: pino (fast structured logging)
 
-### General Guidelines fo Javascript/TypeScript
+### General Guidelines for Javascript/TypeScript
 
 - Always use TypeScript for new projects
 - Configure strict TypeScript settings in tsconfig.json
