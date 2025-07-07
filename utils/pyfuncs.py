@@ -56,10 +56,14 @@ class PythonFunctionExtractor(ast.NodeVisitor):
         params = self._extract_parameters(node.args)
 
         # Extract return type
-        returns = self._extract_return_type(node.returns) if hasattr(node, 'returns') and node.returns else None
+        returns = (
+            self._extract_return_type(node.returns)
+            if hasattr(node, "returns") and node.returns
+            else None
+        )
 
         # Determine if exported (public)
-        exported = not node.name.startswith('_')
+        exported = not node.name.startswith("_")
 
         func_info = FunctionInfo(
             file=self.relative_path,
@@ -71,26 +75,26 @@ class PythonFunctionExtractor(ast.NodeVisitor):
             params=params,
             returns=returns,
             decorators=decorators,
-            is_async=is_async
+            is_async=is_async,
         )
 
         self.functions.append(func_info)
 
     def _determine_function_type(self, node, class_name: Optional[str]) -> str:
         if not class_name:
-            return 'f'  # function
+            return "f"  # function
 
         # Check decorators for special method types
         for decorator in node.decorator_list:
             dec_name = self._get_decorator_name(decorator)
-            if dec_name == 'staticmethod':
-                return 's'
-            elif dec_name == 'classmethod':
-                return 'c'
-            elif dec_name == 'property':
-                return 'p'
+            if dec_name == "staticmethod":
+                return "s"
+            elif dec_name == "classmethod":
+                return "c"
+            elif dec_name == "property":
+                return "p"
 
-        return 'm'  # method
+        return "m"  # method
 
     def _get_decorator_name(self, decorator) -> str:
         if isinstance(decorator, ast.Name):
@@ -102,7 +106,7 @@ class PythonFunctionExtractor(ast.NodeVisitor):
                 return decorator.func.id
             elif isinstance(decorator.func, ast.Attribute):
                 return decorator.func.attr
-        return 'unknown'
+        return "unknown"
 
     def _extract_parameters(self, args: ast.arguments) -> list[str]:
         params = []
@@ -111,28 +115,30 @@ class PythonFunctionExtractor(ast.NodeVisitor):
         for arg in args.args:
             param_str = arg.arg
             if arg.annotation:
-                param_str += ':' + self._extract_type_annotation(arg.annotation)
+                param_str += ":" + self._extract_type_annotation(arg.annotation)
             params.append(param_str)
 
         # *args
         if args.vararg:
-            vararg_str = '*' + args.vararg.arg
+            vararg_str = "*" + args.vararg.arg
             if args.vararg.annotation:
-                vararg_str += ':' + self._extract_type_annotation(args.vararg.annotation)
+                vararg_str += ":" + self._extract_type_annotation(
+                    args.vararg.annotation
+                )
             params.append(vararg_str)
 
         # **kwargs
         if args.kwarg:
-            kwarg_str = '**' + args.kwarg.arg
+            kwarg_str = "**" + args.kwarg.arg
             if args.kwarg.annotation:
-                kwarg_str += ':' + self._extract_type_annotation(args.kwarg.annotation)
+                kwarg_str += ":" + self._extract_type_annotation(args.kwarg.annotation)
             params.append(kwarg_str)
 
         # Keyword-only arguments
         for arg in args.kwonlyargs:
             param_str = arg.arg
             if arg.annotation:
-                param_str += ':' + self._extract_type_annotation(arg.annotation)
+                param_str += ":" + self._extract_type_annotation(arg.annotation)
             params.append(param_str)
 
         return params
@@ -146,7 +152,9 @@ class PythonFunctionExtractor(ast.NodeVisitor):
         elif isinstance(annotation, ast.Constant):
             return repr(annotation.value)
         elif isinstance(annotation, ast.Attribute):
-            return f"{self._extract_type_annotation(annotation.value)}.{annotation.attr}"
+            return (
+                f"{self._extract_type_annotation(annotation.value)}.{annotation.attr}"
+            )
         elif isinstance(annotation, ast.Subscript):
             value = self._extract_type_annotation(annotation.value)
             slice_val = self._extract_type_annotation(annotation.slice)
@@ -158,7 +166,7 @@ class PythonFunctionExtractor(ast.NodeVisitor):
             elements = [self._extract_type_annotation(elt) for elt in annotation.elts]
             return f"[{','.join(elements)}]"
         else:
-            return 'unknown'
+            return "unknown"
 
 
 def extract_functions(directory: str) -> list[FunctionInfo]:
@@ -167,17 +175,21 @@ def extract_functions(directory: str) -> list[FunctionInfo]:
 
     for root, dirs, files in os.walk(directory):
         # Skip common non-source directories
-        dirs[:] = [d for d in dirs if not d.startswith('.') and d not in {'__pycache__', 'node_modules'}]
+        dirs[:] = [
+            d
+            for d in dirs
+            if not d.startswith(".") and d not in {"__pycache__", "node_modules"}
+        ]
 
         for file in files:
-            if not file.endswith('.py'):
+            if not file.endswith(".py"):
                 continue
 
             file_path = os.path.join(root, file)
             relative_path = os.path.relpath(file_path, directory)
 
             try:
-                with open(file_path, encoding='utf-8') as f:
+                with open(file_path, encoding="utf-8") as f:
                     source = f.read()
 
                 tree = ast.parse(source, filename=file_path)
@@ -194,7 +206,7 @@ def extract_functions(directory: str) -> list[FunctionInfo]:
 
 def format_function(fn: FunctionInfo) -> str:
     """Format function info similar to gofuncs output."""
-    exported = 'y' if fn.exported else 'n'
+    exported = "y" if fn.exported else "n"
 
     # Build signature
     signature = f"({','.join(fn.params)})"
@@ -206,7 +218,7 @@ def format_function(fn: FunctionInfo) -> str:
         signature = f"async {signature}"
 
     # Add decorators if any
-    decorators_str = ','.join(fn.decorators) if fn.decorators else ''
+    decorators_str = ",".join(fn.decorators) if fn.decorators else ""
 
     # Format based on whether it's a class method or function
     if fn.class_name:
@@ -216,8 +228,8 @@ def format_function(fn: FunctionInfo) -> str:
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Extract Python function information')
-    parser.add_argument('--dir', default='.', help='Directory to scan for Python files')
+    parser = argparse.ArgumentParser(description="Extract Python function information")
+    parser.add_argument("--dir", default=".", help="Directory to scan for Python files")
     args = parser.parse_args()
 
     try:
@@ -234,5 +246,5 @@ def main():
         sys.exit(1)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
