@@ -29,6 +29,7 @@ gemini -p "@src/ Is the project test coverage on par with industry standards?"
     - lint
     - build tasks need to depend on test and lint tasks
   - All build artefacts should be placed in the `build/` directory if the language builds to a binary
+  - Projects should have a basic Github Actions setup that uses the build-ci task to run tests and linting on push and pull requests
 
 ## Go
 
@@ -48,12 +49,14 @@ When looking for functions, use the `gofuncs` tool to list all functions in a Go
 - Logging in applications run from cron: "log/slog" (standard library)
 - Logging in applications run from CLI: "fmt.Println" (standard library, use emojis for better UX)
 - Configuration management: "github.com/spf13/viper"
-- Command-line arguments: "github.com/spf13/cobra" (only if the project requires complex CLI)
+- Command-line arguments: "github.com/alecthomas/kong" (only if the project requires complex CLI)
 
 ### General Guidelines for Go
 
 - Always run "gofmt -w ." on the Go code files after making changes
 - Always build the project using the taskfile before finishing a task
+- Functions that are easily unit-testable, should have tests
+- Don't go for 100% test coverage, test the critical parts of the code
 
 ## Python
 
