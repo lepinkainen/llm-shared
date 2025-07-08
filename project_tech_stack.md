@@ -54,7 +54,7 @@ When looking for functions, use the `gofuncs` tool to list all functions in a Go
 ### General Guidelines for Go
 
 - Always run "gofmt -w ." on the Go code files after making changes
-- Always build the project using the taskfile before finishing a task
+- Prefer `task build` over `go build` to ensure all tasks are run
 - Functions that are easily unit-testable, should have tests
 - Don't go for 100% test coverage, test the critical parts of the code
 
