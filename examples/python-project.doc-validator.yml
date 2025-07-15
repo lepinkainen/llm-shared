@@ -1,0 +1,28 @@
+# Example configuration for Python projects
+project:
+    name: my-python-app
+    type: python
+validation:
+    directories:
+        required:
+            - src
+        optional:
+            - tests
+            - docs
+            - scripts
+            - data
+    files:
+        required:
+            - requirements.txt
+        patterns:
+            - src/**/*.py
+            - "*.py"
+    dependencies:
+        requirements_txt:
+            - flask
+            - requests
+            - pytest
+            - black
+    build_system:
+        # Python projects typically use direct commands
+        # but can be customized for specific build systems
