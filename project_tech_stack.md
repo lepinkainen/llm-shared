@@ -65,7 +65,7 @@ When looking for functions, use the `pyfuncs` tool to list all functions in a Py
 - Example usage:
 
   ```bash
-  python pyfuncs.py --dir /path/to/project
+  python3 pyfuncs.py --dir /path/to/project
   ```
 
 ### Python Libraries
