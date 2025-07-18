@@ -93,8 +93,6 @@ func detectGoProject(projectDir string) ProjectConfig {
 	// Detect build system
 	if fileExists(filepath.Join(projectDir, "Taskfile.yml")) {
 		config.BuildTasks = []string{"build", "test", "lint"}
-	} else if fileExists(filepath.Join(projectDir, "Makefile")) {
-		config.BuildTasks = []string{"build", "test", "clean"}
 	}
 
 	config.HasMain = true
@@ -203,10 +201,8 @@ func validateBuildSystem(tasks []string, projectDir string) []ValidationResult {
 
 	if fileExists(filepath.Join(projectDir, "Taskfile.yml")) {
 		results = append(results, validateTaskfile(tasks, projectDir)...)
-	} else if fileExists(filepath.Join(projectDir, "Makefile")) {
-		results = append(results, validateMakefile(tasks, projectDir)...)
 	} else {
-		results = append(results, ValidationResult{"warning", "No build system found (consider adding Taskfile.yml)", "build"})
+		results = append(results, ValidationResult{"warning", "No Taskfile.yml found (required for build system)", "build"})
 	}
 
 	return results
@@ -230,30 +226,6 @@ func validateTaskfile(expectedTasks []string, projectDir string) []ValidationRes
 			results = append(results, ValidationResult{"success", fmt.Sprintf("Task found: %s", task), "Taskfile.yml"})
 		} else {
 			results = append(results, ValidationResult{"warning", fmt.Sprintf("Task missing: %s", task), "Taskfile.yml"})
-		}
-	}
-
-	return results
-}
-
-// validateMakefile checks Makefile for expected targets
-func validateMakefile(expectedTargets []string, projectDir string) []ValidationResult {
-	var results []ValidationResult
-	makefilePath := filepath.Join(projectDir, "Makefile")
-
-	content, err := os.ReadFile(makefilePath)
-	if err != nil {
-		results = append(results, ValidationResult{"error", fmt.Sprintf("Error reading Makefile: %v", err), "Makefile"})
-		return results
-	}
-
-	makefileContent := string(content)
-	for _, target := range expectedTargets {
-		targetPattern := target + ":"
-		if strings.Contains(makefileContent, targetPattern) {
-			results = append(results, ValidationResult{"success", fmt.Sprintf("Target found: %s", target), "Makefile"})
-		} else {
-			results = append(results, ValidationResult{"warning", fmt.Sprintf("Target missing: %s", target), "Makefile"})
 		}
 	}
 

@@ -61,9 +61,11 @@ go run utils/validate-docs/validate-docs.go --dir /path/to/project
     - build tasks need to depend on test and lint tasks
   - All build artefacts should be placed in the `build/` directory if the language builds to a binary
   - Projects should have a basic Github Actions setup that uses the build-ci task to run tests and linting on push and pull requests
+  - See `templates/github/workflows/` for CI templates for Go, Python, and JavaScript projects
   - Always keep `.gitignore` up to date with the language-specific ignores so that build artefacts and temporary files are not committed
+  - See `templates/gitignore-*` files for language-specific .gitignore templates
   - When doing HTTP requests, use a custom user agent that includes the project name and version, e.g. `MyProject/1.0.0`
-  - See `examples/Taskfile.yml` for a comprehensive example template that follows these guidelines
+  - See `templates/Taskfile.yml` for a comprehensive example template that follows these guidelines
 
 ## Language-Specific Guidelines
 
