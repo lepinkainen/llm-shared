@@ -2,7 +2,8 @@
 
 Standardized development guidelines and tools for LLM assistants.
 
-**For LLMs**: 
+**For LLMs**:
+
 - Refer to `project_tech_stack.md` for universal development guidelines (project management, validation, common practices)
 - Language-specific guidelines are in the `languages/` directory:
   - `languages/go.md` - Go libraries, tools, and conventions
