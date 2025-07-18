@@ -29,6 +29,23 @@ gemini -p "@src/ Summarise the architecture of this codebase"
 gemini -p "@src/ Is the project test coverage on par with industry standards?"
 ```
 
+## Project validation
+
+- Use the `validate-docs` tool to check if projects follow standard structure conventions
+- The tool auto-detects Go and Python projects and validates:
+  - Standard directory structure (cmd/internal/pkg for Go, src for Python)
+  - Required files (go.mod, requirements.txt, etc.)
+  - Build system configuration (Taskfile.yml)
+  - Code patterns (main functions, test functions) using gofuncs/pyfuncs tools
+
+```bash
+# Validate current directory
+go run utils/validate-docs/validate-docs.go
+
+# Validate specific project
+go run utils/validate-docs/validate-docs.go --dir /path/to/project
+```
+
 ## Common project guidelines
 
 - taskfile "taskfile.dev/task" (for task management instead of makefiles)
