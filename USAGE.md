@@ -29,17 +29,21 @@ Create or update your project's `CLAUDE.md` file:
 
 ```markdown
 # Project Setup
+
 This project uses llm-shared for standardized development practices.
 
 # Guidelines Reference
+
 - Tech stack guidelines: llm-shared/project_tech_stack.md
 - Function analysis tools: llm-shared/utils/
 
 # Function Analysis Commands
-- Go: `go run llm-shared/utils/gofuncs.go -dir .`
+
+- Go: `go run llm-shared/utils/gofuncs/gofuncs.go -dir .`
 - Python: `python llm-shared/utils/pyfuncs.py --dir .`
 
 # Build Commands
+
 - Build: task build
 - Test: task test
 - Lint: task lint
@@ -51,10 +55,10 @@ This project uses llm-shared for standardized development practices.
 
 ```bash
 # Analyze all Go files in current directory
-go run llm-shared/utils/gofuncs.go -dir .
+go run llm-shared/utils/gofuncs/gofuncs.go -dir .
 
 # Analyze specific directory
-go run llm-shared/utils/gofuncs.go -dir ./src
+go run llm-shared/utils/gofuncs/gofuncs.go -dir ./src
 
 # Example output:
 # main.go:15:f:y:main:()
@@ -80,6 +84,7 @@ python llm-shared/utils/pyfuncs.py --dir ./src
 ### Example 1: Go Web API Project
 
 **Project Structure:**
+
 ```
 my-api/
 ├── llm-shared/          # Git submodule
@@ -94,14 +99,18 @@ my-api/
 ```
 
 **CLAUDE.md:**
+
 ```markdown
 # API Project Guidelines
+
 Follow llm-shared/project_tech_stack.md for Go development.
 
 # Function Analysis
-Use: `go run llm-shared/utils/gofuncs.go -dir .`
+
+Use: `go run llm-shared/utils/gofuncs/gofuncs.go -dir .`
 
 # Build Commands
+
 - `task build` - Build server binary
 - `task test` - Run tests
 - `task lint` - Run linter
@@ -110,6 +119,7 @@ Use: `go run llm-shared/utils/gofuncs.go -dir .`
 ### Example 2: Python Data Processing Project
 
 **Project Structure:**
+
 ```
 data-processor/
 ├── llm-shared/          # Git submodule
@@ -122,14 +132,18 @@ data-processor/
 ```
 
 **CLAUDE.md:**
+
 ```markdown
 # Data Processing Project
+
 Follow llm-shared/project_tech_stack.md for Python development.
 
 # Function Analysis
+
 Use: `python llm-shared/utils/pyfuncs.py --dir src/`
 
 # Development Commands
+
 - `uv sync` - Install dependencies
 - `ruff check` - Lint code
 - `mypy src/` - Type check
@@ -143,11 +157,13 @@ Use: `python llm-shared/utils/pyfuncs.py --dir src/`
 The `project_tech_stack.md` file provides:
 
 1. **Language-specific recommendations**
+
    - Preferred libraries and frameworks
    - Standard patterns and practices
    - Tooling recommendations
 
 2. **Project structure guidelines**
+
    - Build system setup (Taskfile)
    - Testing strategies
    - CI/CD patterns
@@ -160,12 +176,14 @@ The `project_tech_stack.md` file provides:
 ### Following Recommendations
 
 **For Go projects:**
+
 - Use standard library when possible
 - Prefer `modernc.org/sqlite` for SQLite
 - Use `log/slog` for cron jobs, `fmt.Println` for CLI
 - Always run `gofmt -w .` after code changes
 
 **For Python projects:**
+
 - Use `uv` for dependency management
 - Use `ruff` for linting and formatting
 - Use `mypy` for type checking
@@ -201,6 +219,7 @@ You can extend the guidelines by:
 ### Common Issues
 
 **Go function analyzer not working:**
+
 ```bash
 # Ensure Go is installed and GOPATH is set
 go version
@@ -208,6 +227,7 @@ go run llm-shared/utils/gofuncs.go -dir .
 ```
 
 **Python function analyzer errors:**
+
 ```bash
 # Ensure Python 3.7+ is installed
 python --version
@@ -215,6 +235,7 @@ python llm-shared/utils/pyfuncs.py --dir .
 ```
 
 **Submodule not updating:**
+
 ```bash
 git submodule update --remote llm-shared
 ```
@@ -229,8 +250,8 @@ You can create project-specific wrappers:
 #!/bin/bash
 # analyze.sh - Project analysis script
 echo "=== Go Functions ==="
-go run llm-shared/utils/gofuncs.go -dir ./cmd
-go run llm-shared/utils/gofuncs.go -dir ./internal
+go run llm-shared/utils/gofuncs/gofuncs.go -dir ./cmd
+go run llm-shared/utils/gofuncs/gofuncs.go -dir ./internal
 
 echo "=== Python Functions ==="
 python llm-shared/utils/pyfuncs.py --dir ./scripts
@@ -241,14 +262,15 @@ python llm-shared/utils/pyfuncs.py --dir ./scripts
 Configure your IDE to run analysis tools:
 
 **VS Code tasks.json:**
+
 ```json
 {
-    "tasks": [
-        {
-            "label": "Analyze Go Functions",
-            "type": "shell",
-            "command": "go run llm-shared/utils/gofuncs.go -dir ."
-        }
-    ]
+  "tasks": [
+    {
+      "label": "Analyze Go Functions",
+      "type": "shell",
+      "command": "go run llm-shared/utils/gofuncs/gofuncs.go -dir ."
+    }
+  ]
 }
 ```
