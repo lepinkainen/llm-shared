@@ -31,6 +31,7 @@ gemini -p "@src/ Is the project test coverage on par with industry standards?"
   - All build artefacts should be placed in the `build/` directory if the language builds to a binary
   - Projects should have a basic Github Actions setup that uses the build-ci task to run tests and linting on push and pull requests
   - Always keep `.gitignore` up to date with the language-specific ignores so that build artefacts and temporary files are not committed
+  - When doing HTTP requests, use a custom user agent that includes the project name and version, e.g. `MyProject/1.0.0`
 
 ## Go
 
