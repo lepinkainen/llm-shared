@@ -8,6 +8,7 @@
   - Linting the code
   - Building the project (if applicable)
 - Task is not complete until it has even basic unit tests, even if they are not comprehensive
+  - No need to mock external dependencies, just test the logic of the code
 
 ## Project analysis with Gemini CLI
 
