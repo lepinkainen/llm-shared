@@ -1,5 +1,16 @@
 # Project Tech Stack and Guidelines
 
+## Project management
+
+- When working from a markdown checklist of tasks, check off the tasks as you complete them
+- Task is not complete until `task build` succeeds, which includes:
+  - Running tests
+  - Linting the code
+  - Building the project (if applicable)
+- Task is not complete until it has even basic unit tests, even if they are not comprehensive
+
+## Project analysis with Gemini CLI
+
 - When analysing a large codebase that might exceed context limits, use the Gemini CLI
 - Use gemini -p when:
   - Analysing entire codebases or large directories
