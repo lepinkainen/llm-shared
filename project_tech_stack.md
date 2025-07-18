@@ -1,5 +1,7 @@
 # Project Tech Stack and Guidelines
 
+My Github repository root is at <https://github.com/lepinkainen/>
+
 ## Project management
 
 - When working from a markdown checklist of tasks, check off the tasks as you complete them
