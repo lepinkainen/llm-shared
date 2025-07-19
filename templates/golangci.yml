@@ -1,0 +1,58 @@
+run:
+  timeout: 5m
+  issues-exit-code: 1
+  tests: true
+
+linters:
+  enable:
+    - gofmt
+    - goimports
+    - govet
+    - errcheck
+    - staticcheck
+    - unused
+    - gosimple
+    - ineffassign
+    - typecheck
+    - misspell
+    - gocritic
+    - revive
+
+linters-settings:
+  govet:
+    enable:
+      - shadow
+  gocritic:
+    enabled-tags:
+      - diagnostic
+      - experimental
+      - opinionated
+      - performance
+      - style
+    disabled-checks:
+      - exitAfterDefer  # CLI apps often exit after defer
+      - rangeValCopy    # Sometimes acceptable for readability
+  revive:
+    severity: warning
+    rules:
+      - name: exported
+        severity: warning
+        disabled: false
+        arguments:
+          - "checkPrivateReceivers"
+          - "sayRepetitiveInsteadOfStutters"
+
+issues:
+  exclude-rules:
+    - path: _test\.go
+      linters:
+        - gosec
+    - path: internal/
+      text: "should have a package comment"
+      linters:
+        - revive
+    - path: llm-shared/
+      linters:
+        - gocritic
+        - revive
+        - goimports

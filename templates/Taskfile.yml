@@ -70,7 +70,7 @@ tasks:
   build-go:
     desc: Build Go project
     cmds:
-      - gofmt -w .
+      - goimports -w .
       - mkdir -p {{.BUILD_DIR}}
       - go build -o {{.BUILD_DIR}}/{{.PROJECT_NAME}} ./cmd/main.go
 
@@ -87,9 +87,9 @@ tasks:
   lint-go:
     desc: Lint Go code
     cmds:
-      - go fmt ./...
+      - goimports -w .
       - go vet ./...
-      - golangci-lint run  # Optional: requires golangci-lint installation
+      - golangci-lint run  # Requires golangci-lint installation
 
   # Python tasks
   build-python:
