@@ -40,6 +40,34 @@ gh label create reddit --description "Reddit provider or integration" --color FF
 
 ---
 
+## Issue State and Workflow Labels
+
+To track the state of issues as they move through your workflow, use these labels:
+
+- `needs-plan`: Issue needs an implementation plan or refinement.
+- `ready`: Issue is ready for implementation (plan is complete).
+- `in-progress`: Work is actively being done on the issue.
+- `review`: Implementation is complete, needs review or testing.
+- `blocked`: Work cannot proceed due to a dependency or missing info.
+
+**How to use state labels:**
+
+- When an issue is first created, add `needs-plan` if it requires further planning.
+- Once an implementation plan is added, replace `needs-plan` with `ready`.
+- When work begins, replace `ready` with `in-progress`.
+- When work is complete and needs review, replace `in-progress` with `review`.
+- If the issue is blocked at any stage, add `blocked` (and remove it when unblocked).
+- When the issue is resolved, close it
+
+You can update labels using the CLI:
+
+```sh
+# Add or remove labels on an issue
+gh issue edit <issue-number> --add-label <label> --remove-label <label>
+```
+
+---
+
 ## Creating Issues
 
 To create a new issue with a title, body, and labels:

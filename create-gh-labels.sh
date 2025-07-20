@@ -9,10 +9,14 @@ gh label create llm-task --description "Task created or managed by LLM" --color 
 gh label create high-priority --description "High priority issue" --color FF0000 || true
 gh label create medium-priority --description "Medium priority issue" --color FFA500 || true
 gh label create low-priority --description "Low priority issue" --color 1D76DB || true
+# Issue state labels
+gh label create needs-plan --description "Needs implementation plan or refinement" --color 5319e7 || true
+gh label create ready --description "Ready for implementation" --color 0e8a16 || true
 gh label create in-progress --description "Task in progress" --color 0052cc || true
 gh label create blocked --description "Task is blocked" --color b60205 || true
-gh label create review --description "Needs review" --color fbca04 || true
-gh label create done --description "Task is done" --color 0e8a16 || true
+gh label create review --description "Needs review or testing" --color fbca04 || true
+# Removed 'done' label as closed issues are considered done
+# Other useful labels
 gh label create bug --description "Bug report" --color d73a4a || true
 gh label create enhancement --description "Enhancement or feature" --color a2eeef || true
 gh label create documentation --description "Documentation" --color 0075ca || true
