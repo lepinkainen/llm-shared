@@ -4,7 +4,7 @@
 
 ## template: backlog_readme
 
-This directory (`@backlog/`) contains individual task files for your project. Each task’s status is encoded in its filename.
+This directory (`backlog/`) contains individual task files for your project. Each task’s status is encoded in its filename.
 
 **Naming Convention:**
 `[task-id]-[short-description]--[status].md`
