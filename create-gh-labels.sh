@@ -27,7 +27,7 @@ gh label create automation --description "Created by automation or bot" --color 
 gh label create duplicate --description "Duplicate issue" --color cfd3d7 || true
 gh label create wontfix --description "Won't fix" --color ffffff || true
 gh label create invalid --description "Invalid issue" --color e4e669 || true
-gh label create good-first-issue --description "Good for newcomers" --color 7057ff || true
-gh label create help-wanted --description "Help wanted" --color 008672 || true
+#gh label create good-first-issue --description "Good for newcomers" --color 7057ff || true
+#gh label create help-wanted --description "Help wanted" --color 008672 || true
 
 echo "All common labels created (existing labels were skipped)."
