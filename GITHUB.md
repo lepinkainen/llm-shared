@@ -13,7 +13,7 @@ This guide describes how LLMs and automation agents can use the GitHub CLI (`gh`
 
 ## Creating Labels
 
-Before creating issues with custom labels, ensure the labels exist.
+Before creating issues with custom labels, ensure the labels exist by running `gh label list`. If a label does not exist, you can create it using the `gh label create` command.
 
 You can quickly initialize a repository with a common set of LLM/project management labels by running:
 
