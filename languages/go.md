@@ -1,12 +1,22 @@
 # Go Guidelines
 
+Always use the latest stable Go version for development. Currentlyu, the latest stable version is Go 1.24.
+
+You can check the latest version at [Go Releases](https://go.dev/dl/).
+
+You can check the current installed Go version with:
+
+```bash
+go version
+```
+
 When looking for functions, use the `gofuncs` tool to list all functions in a Go project. It provides a compact format that is optimized for LLM context.
 
 - Example usage:
 
-  ```bash
+```bash
   go run gofuncs.go -dir /path/to/project
-  ```
+```
 
 ## Go Libraries
 
@@ -18,6 +28,7 @@ When looking for functions, use the `gofuncs` tool to list all functions in a Go
 - Logging in applications run from CLI: "fmt.Println" (standard library, use emojis for better UX)
 - Configuration management: "github.com/spf13/viper"
 - Command-line arguments: "github.com/alecthomas/kong" (only if the project requires complex CLI)
+
   - Example Kong usage:
 
     ```go
@@ -28,6 +39,7 @@ When looking for functions, use the `gofuncs` tool to list all functions in a Go
     var cli CLI
     kong.Parse(&cli)
     ```
+
 - If the application needs an interactive CLI, use "github.com/charmbracelet/bubbletea" for TUI applications
 
 ## Code Formatting and Linting
@@ -35,6 +47,7 @@ When looking for functions, use the `gofuncs` tool to list all functions in a Go
 ### Prerequisites
 
 Install required tools:
+
 ```bash
 go install golang.org/x/tools/cmd/goimports@latest
 go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
@@ -86,8 +99,8 @@ linters-settings:
       - performance
       - style
     disabled-checks:
-      - exitAfterDefer  # CLI apps often exit after defer
-      - rangeValCopy    # Sometimes acceptable for readability
+      - exitAfterDefer # CLI apps often exit after defer
+      - rangeValCopy # Sometimes acceptable for readability
 
 issues:
   exclude-rules:
