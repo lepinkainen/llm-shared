@@ -1,6 +1,15 @@
 # Project Tech Stack and Guidelines
 
+## Git use
+
 My Github repository root is at <https://github.com/lepinkainen/>
+
+- IMPORTANT: NEVER commit to the "main" or "master" branch directly
+- Use feature branches for new features or bug fixes
+- Keep commits small and focused
+- Write clear, descriptive commit messages
+- Rebase branches before merging to keep history clean
+- Use pull requests for code reviews and discussions
 
 ## Project management
 
@@ -72,5 +81,5 @@ go run utils/validate-docs/validate-docs.go --dir /path/to/project
 For detailed language-specific guidelines, libraries, and best practices, see:
 
 - **[Go Guidelines](languages/go.md)** - Go libraries, tools, and conventions
-- **[Python Guidelines](languages/python.md)** - Python libraries, tools, and conventions  
+- **[Python Guidelines](languages/python.md)** - Python libraries, tools, and conventions
 - **[JavaScript/TypeScript Guidelines](languages/javascript.md)** - JS/TS libraries, frameworks, and tools
