@@ -62,8 +62,7 @@ go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
 ### Formatting
 
 - Always run `goimports -w .` on Go code files after making changes
-- `goimports` includes all `gofmt` functionality plus automatic import management
-- Do NOT use `gofmt` directly - `goimports` is superior and standard
+- IMPORTANT: DD NOT use `gofmt` - `goimports` is superior and standard
 
 ### Linting with golangci-lint
 
