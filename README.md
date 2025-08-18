@@ -6,6 +6,7 @@ Standardized development guidelines and tools for LLM assistants.
 
 - Refer to `project_tech_stack.md` for universal development guidelines (project management, validation, common practices)
 - Refer to `GITHUB.md` for GitHub issue management (creating, reading, and managing issues)
+- Refer to `shell_commands.md` for modern shell tool usage (`rg` instead of `grep`, `fd` instead of `find`)
 - Language-specific guidelines are in the `languages/` directory:
   - `languages/go.md` - Go libraries, tools, and conventions
   - `languages/python.md` - Python libraries, tools, and conventions
