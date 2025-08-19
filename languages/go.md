@@ -2,9 +2,11 @@
 
 IMPORTANT: Before claiming any task as completed, run `task build` to ensure all tasks are run successfully, including tests, linters, and formatters.
 
+Be aware of file sizes, if a single file grows too large, suggest splitting it into smaller files.  
+
 ## Go versioning
 
-Always use the latest stable Go version for development. Currentlyu, the latest stable version is Go 1.24.
+Always use the latest stable Go version for development. Currently, the latest stable version is Go 1.24.
 
 You can check the latest version at [Go Releases](https://go.dev/dl/).
 
