@@ -128,6 +128,80 @@ issues:
 - GitHub Actions CI should install goimports alongside other Go tools
 - Use modern govet shadow detection: `enable: [shadow]` not `check-shadowing: true`
 
+## GitHub Actions CI Best Practices
+
+### Template Usage
+
+Use the provided `templates/github/workflows/go-ci.yml` as a starting point. The template includes:
+
+- **Parallel jobs**: Separate test, lint, and build jobs for faster feedback
+- **Security**: All actions pinned to specific commit SHAs
+- **Performance**: Built-in Go module caching via `actions/setup-go@v5`
+- **Modern tooling**: golangci-lint-action for efficient linting
+
+### Security Best Practices
+
+- **Pin actions to commit SHAs**: Use specific commits instead of version tags (e.g., `actions/checkout@70a5ac30...` not `@v4`)
+- **Regular updates**: Keep action versions current for security patches
+- **Minimal permissions**: Use `permissions: contents: read` for read-only workflows
+
+### Keeping Pinned Actions Updated
+
+Since actions are pinned to commit SHAs for security, you need a strategy to update them:
+
+#### Automated Updates (Recommended)
+
+Use Dependabot to automatically create PRs for action updates. Add `.github/dependabot.yml`:
+
+```yaml
+---
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "ci"
+      include: "scope"
+```
+
+#### Manual Monitoring
+
+- Monitor key action repositories for releases:
+  - [actions/checkout](https://github.com/actions/checkout/releases)
+  - [actions/setup-go](https://github.com/actions/setup-go/releases)  
+  - [golangci/golangci-lint-action](https://github.com/golangci/golangci-lint-action/releases)
+- Update quarterly or when security advisories are published
+- Get SHA for specific version: `gh api repos/actions/checkout/git/refs/tags/v4.5.0 --jq '.object.sha'`
+
+### Performance Optimizations
+
+- **Automatic caching**: `actions/setup-go` with `cache: true` caches `GOCACHE` and `GOMODCACHE`
+- **golangci-lint-action**: More efficient than manual installation, includes result caching
+- **Parallel execution**: Run tests and linting concurrently to reduce CI time
+
+### Matrix Builds (Advanced)
+
+For libraries or cross-platform tools, consider testing multiple Go versions:
+
+```yaml
+strategy:
+  matrix:
+    go-version: [1.23, 1.24]
+    os: [ubuntu-latest, windows-latest, macos-latest]
+```
+
+### Local Testing
+
+Install [`act`](https://github.com/nektos/act) to test GitHub Actions workflows locally:
+
+```bash
+brew install act
+act -j test  # Run specific job
+act          # Run entire workflow
+```
+
 ## General Guidelines for Go
 
 - Always run `goimports -w .` on Go code files after making changes
