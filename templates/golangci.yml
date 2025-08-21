@@ -7,15 +7,11 @@ run:
 
 linters:
   enable:
-    - gofmt
-    - goimports
     - govet
     - errcheck
     - staticcheck
     - unused
-    - gosimple
     - ineffassign
-    - typecheck
     - misspell
     - gocritic
     - revive
