@@ -75,7 +75,7 @@ tasks:
   test-go:
     desc: Run Go tests
     cmds:
-      - go test -v ./...
+      - go test ./... # Don't use -v flag to save context
 
   test-go-ci:
     desc: Run Go tests with coverage for CI
