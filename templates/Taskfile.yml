@@ -1,6 +1,6 @@
 # Example Taskfile.yml following project tech stack guidelines
 # See: https://taskfile.dev/
-version: '3'
+version: "3"
 
 vars:
   BUILD_DIR: build
@@ -27,10 +27,9 @@ tasks:
     cmds:
       - task: build-go
 
-  # CI build with proper test coverage and linting
+  # CI build without tests/linting (run separately in CI)
   build-ci:
-    desc: Build for CI/CD
-    deps: [test-ci, lint]
+    desc: Build for CI/CD (build only)
     cmds:
       - task: build-go
 
@@ -70,7 +69,6 @@ tasks:
   build-go:
     desc: Build Go project
     cmds:
-      - goimports -w .
       - mkdir -p {{.BUILD_DIR}}
       - go build -o {{.BUILD_DIR}}/{{.PROJECT_NAME}} ./cmd/main.go
 
@@ -89,7 +87,7 @@ tasks:
     cmds:
       - goimports -w .
       - go vet ./...
-      - golangci-lint run  # Requires golangci-lint installation
+      - golangci-lint run # Requires golangci-lint installation
 
   # Python tasks
   build-python:
@@ -174,7 +172,6 @@ tasks:
     desc: Run Docker container
     cmds:
       - docker run -p 8080:8080 {{.PROJECT_NAME}}:{{.VERSION}}
-
 # Example project structure this Taskfile supports:
 #
 # Project root/
