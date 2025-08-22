@@ -12,16 +12,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@70a5ac30729c76bd992157778526e6eb5e390073  # v4.5.0
+      - uses: actions/checkout@v5
 
       - name: Set up Go
-        uses: actions/setup-go@0a12ed9d6a96ab950c8f026ed9f722fe0da7ef32  # v5.2.0
+        uses: actions/setup-go@v5
         with:
           go-version: "1.24"
           cache: true  # Automatically caches go.mod/go.sum dependencies
 
       - name: Install Task
-        uses: arduino/setup-task@b91d5d2c96a56797b48ac1e0e89220bf64044611  # v2.0.0
+        uses: arduino/setup-task@v2
         with:
           version: 3.x
 
@@ -37,16 +37,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@70a5ac30729c76bd992157778526e6eb5e390073  # v4.5.0
+      - uses: actions/checkout@v5
 
       - name: Set up Go
-        uses: actions/setup-go@0a12ed9d6a96ab950c8f026ed9f722fe0da7ef32  # v5.2.0
+        uses: actions/setup-go@v5
         with:
           go-version: "1.24"
           cache: true
 
       - name: golangci-lint
-        uses: golangci/golangci-lint-action@aaa42aa0628b4ae2578232a66b541047968fac86  # v6.1.0
+        uses: golangci/golangci-lint-action@v8
         with:
           version: latest
           args: --timeout=5m
@@ -56,16 +56,16 @@ jobs:
     needs: [test, lint]
 
     steps:
-      - uses: actions/checkout@70a5ac30729c76bd992157778526e6eb5e390073  # v4.5.0
+      - uses: actions/checkout@v5
 
       - name: Set up Go
-        uses: actions/setup-go@0a12ed9d6a96ab950c8f026ed9f722fe0da7ef32  # v5.2.0
+        uses: actions/setup-go@v5
         with:
           go-version: "1.24"
           cache: true
 
       - name: Install Task
-        uses: arduino/setup-task@b91d5d2c96a56797b48ac1e0e89220bf64044611  # v2.0.0
+        uses: arduino/setup-task@v2
         with:
           version: 3.x
 
@@ -73,7 +73,7 @@ jobs:
         run: task build
 
       - name: Upload coverage reports to Codecov (Optional)
-        uses: codecov/codecov-action@6d798873df2b1b8e5846dba6fb86631229fbcb17  # v4.6.0
+        uses: codecov/codecov-action@v5
         if: success() && hashFiles('./coverage.out') != ''
         with:
           file: ./coverage.out
