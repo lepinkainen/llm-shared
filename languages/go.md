@@ -135,7 +135,6 @@ issues:
 Use the provided `templates/github/workflows/go-ci.yml` as a starting point. The template includes:
 
 - **Parallel jobs**: Separate test, lint, and build jobs for faster feedback
-- **Security**: All actions pinned to specific commit SHAs
 - **Performance**: Built-in Go module caching via `actions/setup-go@v5`
 - **Modern tooling**: golangci-lint-action for efficient linting
 
