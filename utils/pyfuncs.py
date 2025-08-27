@@ -9,7 +9,6 @@ import ast
 import os
 import sys
 from dataclasses import dataclass
-from typing import Optional
 
 
 @dataclass
@@ -19,9 +18,9 @@ class FunctionInfo:
     type: str  # f=function, m=method, s=staticmethod, c=classmethod, p=property
     exported: bool  # True if public (not starting with _)
     name: str
-    class_name: Optional[str]
+    class_name: str | None
     params: list[str]
-    returns: Optional[str]
+    returns: str | None
     decorators: list[str]
     is_async: bool
 
@@ -80,7 +79,7 @@ class PythonFunctionExtractor(ast.NodeVisitor):
 
         self.functions.append(func_info)
 
-    def _determine_function_type(self, node, class_name: Optional[str]) -> str:
+    def _determine_function_type(self, node, class_name: str | None) -> str:
         if not class_name:
             return "f"  # function
 
@@ -122,9 +121,7 @@ class PythonFunctionExtractor(ast.NodeVisitor):
         if args.vararg:
             vararg_str = "*" + args.vararg.arg
             if args.vararg.annotation:
-                vararg_str += ":" + self._extract_type_annotation(
-                    args.vararg.annotation
-                )
+                vararg_str += ":" + self._extract_type_annotation(args.vararg.annotation)
             params.append(vararg_str)
 
         # **kwargs
@@ -152,9 +149,7 @@ class PythonFunctionExtractor(ast.NodeVisitor):
         elif isinstance(annotation, ast.Constant):
             return repr(annotation.value)
         elif isinstance(annotation, ast.Attribute):
-            return (
-                f"{self._extract_type_annotation(annotation.value)}.{annotation.attr}"
-            )
+            return f"{self._extract_type_annotation(annotation.value)}.{annotation.attr}"
         elif isinstance(annotation, ast.Subscript):
             value = self._extract_type_annotation(annotation.value)
             slice_val = self._extract_type_annotation(annotation.slice)
@@ -176,9 +171,7 @@ def extract_functions(directory: str) -> list[FunctionInfo]:
     for root, dirs, files in os.walk(directory):
         # Skip common non-source directories
         dirs[:] = [
-            d
-            for d in dirs
-            if not d.startswith(".") and d not in {"__pycache__", "node_modules"}
+            d for d in dirs if not d.startswith(".") and d not in {"__pycache__", "node_modules"}
         ]
 
         for file in files:
