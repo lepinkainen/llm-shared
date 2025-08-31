@@ -2,7 +2,7 @@
 
 IMPORTANT: Before claiming any task as completed, run `task build` to ensure all tasks are run successfully, including tests, linters, and formatters.
 
-Be aware of file sizes, if a single file grows too large, suggest splitting it into smaller files.  
+Be aware of file sizes, if a single file grows too large, suggest splitting it into smaller files.
 
 ## Go versioning
 
@@ -36,7 +36,6 @@ When looking for functions, use the `gofuncs` tool to list all functions in a Go
 - Logging in applications run from CLI: "fmt.Println" (standard library, use emojis for better UX)
 - Configuration management: "github.com/spf13/viper"
 - Command-line arguments: "github.com/alecthomas/kong" (only if the project requires complex CLI)
-
   - Example Kong usage:
 
     ```go
@@ -156,20 +155,20 @@ Use Dependabot to automatically create PRs for action updates. Add `.github/depe
 ---
 version: 2
 updates:
-  - package-ecosystem: "github-actions"
-    directory: "/"
+  - package-ecosystem: 'github-actions'
+    directory: '/'
     schedule:
-      interval: "weekly"
+      interval: 'weekly'
     commit-message:
-      prefix: "ci"
-      include: "scope"
+      prefix: 'ci'
+      include: 'scope'
 ```
 
 #### Manual Monitoring
 
 - Monitor key action repositories for releases:
   - [actions/checkout](https://github.com/actions/checkout/releases)
-  - [actions/setup-go](https://github.com/actions/setup-go/releases)  
+  - [actions/setup-go](https://github.com/actions/setup-go/releases)
   - [golangci/golangci-lint-action](https://github.com/golangci/golangci-lint-action/releases)
 - Update quarterly or when security advisories are published
 - Get SHA for specific version: `gh api repos/actions/checkout/git/refs/tags/v4.5.0 --jq '.object.sha'`

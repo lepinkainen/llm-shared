@@ -8,29 +8,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+
 - Initial project setup
 - Core functionality implementation
 - Test suite
 - CI/CD pipeline
 
 ### Changed
+
 - Nothing yet
 
 ### Deprecated
+
 - Nothing yet
 
 ### Removed
+
 - Nothing yet
 
 ### Fixed
+
 - Nothing yet
 
 ### Security
+
 - Nothing yet
 
 ## [0.1.0] - 2024-01-01
 
 ### Added
+
 - Initial release
 - Basic project structure
 - Core functionality

@@ -11,6 +11,7 @@ go run validate-docs.go --init go
 **Purpose**: Validates that documentation accurately reflects the current codebase structure across multiple project types.
 
 **Features**:
+
 - **Auto-detection**: Automatically detects project type (Go, Node.js, Python, Rust)
 - **Configuration-driven**: YAML-based validation rules with project-specific customization
 - **Multi-language support**: Built-in templates for common project structures
@@ -21,6 +22,7 @@ go run validate-docs.go --init go
 **Output**: Colored validation results with summary (✅ success, ⚠️ warning, ❌ error)
 
 **Examples**:
+
 ```bash
 # Auto-detect and validate current project
 go run validate-docs.go --auto-detect
@@ -33,8 +35,9 @@ go run validate-docs.go --config .doc-validator.yml
 ```
 
 **Template configs** available in `../examples/`:
+
 - `go-project.doc-validator.yml`
-- `node-project.doc-validator.yml` 
+- `node-project.doc-validator.yml`
 - `python-project.doc-validator.yml`
 - `rust-project.doc-validator.yml`
 

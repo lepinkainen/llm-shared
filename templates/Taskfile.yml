@@ -1,6 +1,6 @@
 # Example Taskfile.yml following project tech stack guidelines
 # See: https://taskfile.dev/
-version: "3"
+version: '3'
 
 vars:
   BUILD_DIR: build

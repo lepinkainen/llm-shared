@@ -21,7 +21,7 @@ rg -i "pattern"
 
 # Search specific file types
 rg -t go "pattern"
-rg -t js "pattern" 
+rg -t js "pattern"
 rg -t py "pattern"
 
 # Search with context lines
