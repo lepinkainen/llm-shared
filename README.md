@@ -18,3 +18,13 @@ Standardized development guidelines and tools for LLM assistants.
 - `pyfuncs.py` - Python function analyzer
 - `jsfuncs.js` - JavaScript/TypeScript function analyzer
 - `validate-docs.go` - Project structure validator
+
+**Repository hooks**:
+
+If the repository uses hooks, enable this setting:
+
+```sh
+git config core.hooksPath scripts/hooks
+```
+
+Then all hooks should be in the `scripts/hooks` directory.
