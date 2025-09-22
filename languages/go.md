@@ -139,7 +139,6 @@ Use the provided `templates/github/workflows/go-ci.yml` as a starting point. The
 
 ### Security Best Practices
 
-- **Pin actions to commit SHAs**: Use specific commits instead of version tags (e.g., `actions/checkout@70a5ac30...` not `@v4`)
 - **Regular updates**: Keep action versions current for security patches
 - **Minimal permissions**: Use `permissions: contents: read` for read-only workflows
 
