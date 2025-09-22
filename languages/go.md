@@ -207,3 +207,5 @@ act          # Run entire workflow
   - `task build` will run tests, linters, and formatters
 - Functions that are easily unit-testable, should have tests
 - Don't go for 100% test coverage, test the critical parts of the code
+- Always use `any` instead of `interface{}` for empty interfaces
+- Use `errors.Is` and `errors.As` for error handling and wrapping
