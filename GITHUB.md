@@ -126,7 +126,3 @@ gh issue list --search "<keyword>"
 - Use `--body-file` to include detailed markdown content from local files, or `--body` for inline text.
 - Use `gh issue list` and `gh issue view` to programmatically read and process issues for task management.
 - All commands should be run from the repository root for correct context.
-
----
-
-For more, see: https://cli.github.com/manual/

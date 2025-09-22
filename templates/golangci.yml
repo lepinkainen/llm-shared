@@ -1,4 +1,4 @@
-version: '2'
+version: "2"
 
 run:
   timeout: 5m
@@ -38,10 +38,10 @@ linters:
       rules:
         - name: exported
           severity: warning
-          disabled: true # Type names like TaskEvent are fine
+          disabled: false
           arguments:
-            - 'checkPrivateReceivers'
-            - 'sayRepetitiveInsteadOfStutters'
+            - "checkPrivateReceivers"
+            - "sayRepetitiveInsteadOfStutters"
 
 issues:
   max-issues-per-linter: 0
