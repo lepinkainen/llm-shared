@@ -207,4 +207,9 @@ act          # Run entire workflow
 - Functions that are easily unit-testable, should have tests
 - Don't go for 100% test coverage, test the critical parts of the code
 - Always use `any` instead of `interface{}` for empty interfaces
-- Use `errors.Is` and `errors.As` for error handling and wrapping
+- **Error handling**: Always use `errors.Is` and `errors.As` for robust error handling
+  - Use `errors.Is(err, target)` instead of `err == target` for error comparison
+  - Use `errors.As(err, &target)` instead of type assertions `err.(*Type)`
+  - Create sentinel errors with `var ErrNotFound = errors.New("not found")`
+  - Add `Unwrap() error` method to custom error types for proper error chaining
+  - These functions work correctly with wrapped errors, unlike direct comparisons
