@@ -28,3 +28,8 @@ git config core.hooksPath scripts/hooks
 ```
 
 Then all hooks should be in the `scripts/hooks` directory.
+
+**Web UI**:
+
+- All Web UIs MUST have a `/whoami` endpoint that returns the project name, git hash, build time and version in JSON format, e.g. `{"name":"MyProject","version":"1.0.0", "hash":"abc123", "build_time":"2024-01-01T00:00:00Z"}`.
+- When something is running in the port, you MUST use the `/whoami` endpoint to identify it before attempting to start it or kill it.
