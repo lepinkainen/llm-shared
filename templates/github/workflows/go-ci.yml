@@ -20,7 +20,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version: '1.25'
+          go-version: '1.25' # Update via scripts/update_versions.py → versions.md
           cache: true # Automatically caches go.mod/go.sum dependencies
 
       - name: Install Task
@@ -46,7 +46,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version: '1.25'
+          go-version: '1.25' # Keep in sync with versions.md
           cache: true
 
       - name: golangci-lint
@@ -65,7 +65,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version: '1.25'
+          go-version: '1.25' # Keep in sync with versions.md
           cache: true
 
       - name: Install Task

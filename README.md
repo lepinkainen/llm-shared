@@ -19,6 +19,8 @@ Standardized development guidelines and tools for LLM assistants.
 - `jsfuncs.js` - JavaScript/TypeScript function analyzer
 - `validate-docs.go` - Project structure validator
 
+**Versions**: Run `python scripts/update_versions.py` (or rely on the scheduled GitHub Action) to refresh `versions.md`, which tracks recommended Go, Python, and GitHub Action versions.
+
 **Repository hooks**:
 
 If the repository uses hooks, enable this setting:

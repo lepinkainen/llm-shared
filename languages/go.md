@@ -6,11 +6,9 @@ Be aware of file sizes, if a single file grows too large, suggest splitting it i
 
 ## Go versioning
 
-Always use the latest stable Go version for development. Currently, the latest stable version is Go 1.24.
+Always use the Go toolchain listed in `versions.md`, which is kept in sync with the latest stable release.
 
-You can check the latest version at [Go Releases](https://go.dev/dl/).
-
-You can check the current installed Go version with:
+You can check the locally installed Go version with:
 
 ```bash
 go version

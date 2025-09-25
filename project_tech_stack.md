@@ -46,6 +46,7 @@ gemini -p "@src/ Is the project test coverage on par with industry standards?"
   - Required files (go.mod, requirements.txt, etc.)
   - Build system configuration (Taskfile.yml)
   - Code patterns (main functions, test functions) using gofuncs/pyfuncs tools
+- Consult `versions.md` for the canonical language runtime and GitHub Actions versions before updating tooling
 
 ```bash
 # Validate current directory
