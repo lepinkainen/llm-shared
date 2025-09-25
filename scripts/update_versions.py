@@ -58,7 +58,9 @@ USER_AGENT = "llm-shared-version-bot/1.0"
 END_OF_LIFE_BASE = "https://endoflife.date/api/v1/products"
 
 
-def _gh_api(path: str) -> object:
+def _gh_api(path: str) -> dict:
+    if not GH_PATH:
+        raise SystemExit("gh CLI is required to run this script")
     try:
         result = subprocess.run(
             [GH_PATH, "api", path],
@@ -75,7 +77,7 @@ def _gh_api(path: str) -> object:
         raise RuntimeError(f"gh api {path} returned non-JSON output") from exc
 
 
-def _fetch_json(url: str, headers: Optional[dict[str, str]] = None) -> object:
+def _fetch_json(url: str, headers: Optional[dict[str, str]] = None) -> dict:
     if headers is None:
         headers = {"User-Agent": USER_AGENT}
     request = urllib.request.Request(url, headers=headers)
