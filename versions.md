@@ -1,6 +1,6 @@
 # Toolchain Versions
 
-_Last updated: 2025-09-25 21:57 UTC_
+_Last updated: 2025-09-25 22:14 UTC_
 
 ## Languages
 
@@ -8,6 +8,8 @@ _Last updated: 2025-09-25 21:57 UTC_
 | --- | --- |
 | [Go](https://go.dev/dl/) | 1.25.1 |
 | [Python](https://www.python.org/downloads/) | 3.13.7 |
+| [Tailwind CSS](https://tailwindcss.com) | 4.1.13 |
+| [Node.js](https://nodejs.org/en/download/) | 24.8.0 |
 
 ## GitHub Actions
 
@@ -26,3 +28,4 @@ _Last updated: 2025-09-25 21:57 UTC_
 | [peter-evans/create-pull-request](https://github.com/peter-evans/create-pull-request) | v7.0.8 |
 
 > Run `python scripts/update_versions.py` locally to refresh this table immediately.
+

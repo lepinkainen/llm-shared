@@ -17,14 +17,20 @@ from typing import Optional
 
 LANGUAGE_SOURCES = {
     "Go": {
-        "url": "https://endoflife.date/api/v1/products/go/releases/latest",
-        "type": "endoflife_latest",
+        "id": "go",
         "notes": "https://go.dev/dl/",
     },
     "Python": {
-        "url": "https://endoflife.date/api/v1/products/python/releases/latest",
-        "type": "endoflife_latest",
+        "id": "python",
         "notes": "https://www.python.org/downloads/",
+    },
+    "Tailwind CSS": {
+        "id": "tailwind-css",
+        "notes": "https://tailwindcss.com",
+    },
+    "Node.js": {
+        "id": "nodejs",
+        "notes": "https://nodejs.org/en/download/",
     },
 }
 
@@ -55,7 +61,7 @@ if GH_PATH is None:
 
 USER_AGENT = "llm-shared-version-bot/1.0"
 
-END_OF_LIFE_BASE = "https://endoflife.date/api/v1/products"
+END_OF_LIFE_URL = "https://endoflife.date/api/v1/products/{id}/releases/latest"
 
 
 def _gh_api(path: str) -> dict:
@@ -85,16 +91,8 @@ def _fetch_json(url: str, headers: Optional[dict[str, str]] = None) -> dict:
         return json.load(response)
 
 
-def _latest_go_version() -> str:
-    return _latest_endoflife_version("go")
-
-
-def _latest_python_version() -> str:
-    return _latest_endoflife_version("python")
-
-
 def _latest_endoflife_version(product: str) -> str:
-    url = f"{END_OF_LIFE_BASE}/{product}/releases/latest"
+    url = END_OF_LIFE_URL.format(id=product)
     data = _fetch_json(url, headers={"User-Agent": USER_AGENT})
     if not isinstance(data, dict):
         return "unknown"
@@ -143,12 +141,7 @@ def collect_language_versions() -> list[VersionRecord]:
     records: list[VersionRecord] = []
     for name, meta in LANGUAGE_SOURCES.items():
         try:
-            if name == "Go":
-                version = _latest_go_version()
-            elif name == "Python":
-                version = _latest_python_version()
-            else:
-                version = "unknown"
+            version = _latest_endoflife_version(meta["id"])
         except Exception as exc:  # pylint: disable=broad-except
             print(f"Warning: could not fetch {name} version: {exc}", file=sys.stderr)
             version = "unknown"
