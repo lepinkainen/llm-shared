@@ -1,0 +1,86 @@
+# .dockerignore - Exclude files from Docker build context
+# This reduces build time and context size
+
+# Git files
+.git/
+.gitignore
+.gitattributes
+.gitmodules
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+.travis.yml
+
+# Documentation
+*.md
+README*
+CHANGELOG*
+LICENSE*
+docs/
+doc/
+
+# Development tools
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Build artifacts
+build/
+dist/
+bin/
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Test files and coverage
+*_test.go
+testdata/
+coverage.out
+coverage.html
+*.test
+
+# Dependencies (already in go.mod/go.sum)
+vendor/
+
+# Data and logs
+data/
+logs/
+*.log
+*.db
+*.sqlite
+*.sqlite3
+
+# Environment files
+.env
+.env.*
+*.local
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Docker files (don't need in build context)
+docker-compose*.yml
+Dockerfile*
+.dockerignore
+
+# Task and Make files
+Taskfile.yml
+Makefile
+
+# Scripts (unless needed at runtime)
+scripts/
+*.sh
+
+# LLM shared (if using as submodule)
+llm-shared/

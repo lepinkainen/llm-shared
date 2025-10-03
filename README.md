@@ -7,10 +7,19 @@ Standardized development guidelines and tools for LLM assistants.
 - Refer to `project_tech_stack.md` for universal development guidelines (project management, validation, common practices)
 - Refer to `GITHUB.md` for GitHub issue management (creating, reading, and managing issues)
 - Refer to `shell_commands.md` for modern shell tool usage (`rg` instead of `grep`, `fd` instead of `find`)
+- Refer to `docker.md` for Docker deployment patterns (multi-stage builds, GHCR, docker-compose)
 - Language-specific guidelines are in the `languages/` directory:
   - `languages/go.md` - Go libraries, tools, and conventions
   - `languages/python.md` - Python libraries, tools, and conventions
   - `languages/javascript.md` - JavaScript/TypeScript libraries, frameworks, and tools
+
+**Templates**: The `templates/` directory contains starter files and configuration templates:
+
+- `templates/docker/` - Docker deployment templates (Dockerfile, docker-compose, GitHub Actions)
+- `templates/github/workflows/` - CI/CD workflows for Go, Python, JavaScript
+- `templates/Taskfile.yml` - Comprehensive task runner configuration
+- `templates/gitignore-*` - Language-specific .gitignore files
+- `templates/golangci.yml` - Go linter configuration
 
 **Tools**: The `utils/` directory contains function analysis tools for code exploration:
 

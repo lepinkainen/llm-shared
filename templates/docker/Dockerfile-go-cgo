@@ -1,0 +1,81 @@
+# Multi-stage Dockerfile for Go applications requiring CGO
+# Use this template when your application requires CGO
+# (e.g., using github.com/mattn/go-sqlite3 or other C libraries)
+
+# Stage 1: Build the Go application with CGO
+FROM golang:1.25-alpine AS builder
+
+# Install build dependencies including C compiler
+RUN apk add --no-cache \
+    git \
+    ca-certificates \
+    tzdata \
+    gcc \
+    musl-dev
+
+# Set working directory
+WORKDIR /app
+
+# Copy go.mod and go.sum for dependency caching
+COPY go.mod go.sum ./
+
+# Download dependencies (cached if go.mod/go.sum unchanged)
+RUN go mod download
+
+# Copy source code
+COPY . .
+
+# Build the application with CGO enabled
+# CGO_ENABLED=1: Enable CGO for C dependencies
+# -ldflags="-w -s": Strip debug information for smaller binary
+# -trimpath: Remove file system paths from binary
+RUN CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build \
+    -ldflags="-w -s" \
+    -trimpath \
+    -o app \
+    .
+
+# Stage 2: Create minimal runtime image with C library support
+FROM alpine:3.19
+
+# Install runtime dependencies
+# ca-certificates: For HTTPS requests
+# tzdata: For timezone support
+RUN apk add --no-cache \
+    ca-certificates \
+    tzdata
+
+# Create non-root user
+RUN adduser -D -u 1000 appuser
+
+# Set working directory
+WORKDIR /app
+
+# Copy binary from builder (includes linked C libraries)
+COPY --from=builder /app/app .
+
+# Copy static files (if needed)
+# COPY --from=builder /app/static ./static
+# COPY --from=builder /app/templates ./templates
+
+# Copy configuration (if baking into image)
+# COPY config.yaml .
+
+# Create data directory and set ownership
+RUN mkdir -p /data && chown -R appuser:appuser /app /data
+
+# Switch to non-root user
+USER appuser
+
+# Expose application port
+EXPOSE 8080
+
+# Set environment variables
+ENV PORT=8080
+
+# Health check (optional - adjust URL as needed)
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+    CMD wget --no-verbose --tries=1 --spider http://localhost:8080/health || exit 1
+
+# Run the application
+CMD ["./app"]

@@ -1,0 +1,95 @@
+---
+# Docker Compose configuration for local development
+# This file provides a basic template for running a Go application with Docker Compose
+
+services:
+  # Main application service
+  app:
+    # Build from local Dockerfile
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    # Container name (customize to your project)
+    container_name: myapp
+
+    # Port mapping (host:container)
+    ports:
+      - "8080:8080"
+
+    # Environment variables
+    environment:
+      - PORT=8080
+      # Add other environment variables as needed
+      # - DATABASE_URL=postgres://user:pass@postgres:5432/dbname
+      # - LOG_LEVEL=debug
+
+    # Volume mounts
+    volumes:
+      # Mount local data directory for persistence
+      - ./data:/data
+
+      # Optional: Mount config file (read-only)
+      # - ./config.yaml:/app/config.yaml:ro
+
+      # Optional: Mount entire source for development with hot reload
+      # - .:/app
+
+    # Restart policy
+    restart: unless-stopped
+
+    # Dependencies (if using other services)
+    # depends_on:
+    #   - postgres
+    #   - redis
+
+    # Health check
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+
+  # Example: PostgreSQL database service
+  # Uncomment if your application uses PostgreSQL
+  # postgres:
+  #   image: postgres:16-alpine
+  #   container_name: myapp-postgres
+  #   environment:
+  #     - POSTGRES_USER=myapp
+  #     - POSTGRES_PASSWORD=secret
+  #     - POSTGRES_DB=myapp
+  #   ports:
+  #     - "5432:5432"
+  #   volumes:
+  #     - pgdata:/var/lib/postgresql/data
+  #   restart: unless-stopped
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "pg_isready -U myapp"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
+
+  # Example: Redis cache service
+  # Uncomment if your application uses Redis
+  # redis:
+  #   image: redis:7-alpine
+  #   container_name: myapp-redis
+  #   ports:
+  #     - "6379:6379"
+  #   restart: unless-stopped
+  #   healthcheck:
+  #     test: ["CMD", "redis-cli", "ping"]
+  #     interval: 10s
+  #     timeout: 3s
+  #     retries: 3
+
+# Named volumes (for data persistence)
+# volumes:
+#   pgdata:
+
+# Networks (optional - Docker Compose creates a default network)
+# networks:
+#   myapp-network:
+#     driver: bridge

@@ -77,6 +77,39 @@ go run utils/validate-docs/validate-docs.go --dir /path/to/project
   - When doing HTTP requests, use a custom user agent that includes the project name and version, e.g. `MyProject/1.0.0`
   - See `templates/Taskfile.yml` for a comprehensive example template that follows these guidelines
 
+## Docker Deployment
+
+For containerized applications (web services, APIs, long-running daemons):
+
+- **Documentation**: See `docker.md` for comprehensive Docker deployment guide
+- **Templates**: Use `templates/docker/` for starter files:
+  - `Dockerfile-go-pure` - For pure Go applications (no CGO)
+  - `Dockerfile-go-cgo` - For applications requiring CGO (e.g., mattn/go-sqlite3)
+  - `docker-compose.yml` - Local development setup
+  - `github-workflows-docker.yml` - Automated builds to GHCR
+  - `.dockerignore` - Optimize build context
+
+**Key principles:**
+
+- Use multi-stage builds for minimal image sizes
+- Prefer pure Go (modernc.org/sqlite) over CGO when possible
+- Always include a `/health` endpoint for health checks
+- Use named volumes for data persistence
+- Run containers as non-root user
+- Host images on GitHub Container Registry (GHCR)
+
+**Quick start:**
+
+```bash
+# Copy appropriate template
+cp llm-shared/templates/docker/Dockerfile-go-pure ./Dockerfile
+cp llm-shared/templates/docker/docker-compose.yml ./
+cp llm-shared/templates/docker/.dockerignore ./
+
+# Copy GitHub Actions workflow
+cp llm-shared/templates/docker/github-workflows-docker.yml .github/workflows/docker-build.yml
+```
+
 ## Language-Specific Guidelines
 
 For detailed language-specific guidelines, libraries, and best practices, see:
