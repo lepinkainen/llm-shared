@@ -135,6 +135,12 @@ Use the provided `templates/github/workflows/go-ci.yml` as a starting point. The
 - **Performance**: Built-in Go module caching via `actions/setup-go@v5`
 - **Modern tooling**: golangci-lint-action for efficient linting
 
+**IMPORTANT**: The `build-ci` task should ONLY compile/build the application. Do NOT add dependencies on `test` or `lint` tasks in `build-ci`. The CI workflow manages job dependencies via `needs: [test, lint]` on the build job. This ensures:
+
+- Clean separation of concerns (test job tests, lint job lints, build job builds)
+- Faster CI builds (no duplicate test/lint runs)
+- No need to install testing/linting tools in the build job
+
 ### Security Best Practices
 
 - **Regular updates**: Keep action versions current for security patches
