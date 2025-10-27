@@ -13,7 +13,6 @@ import textwrap
 import urllib.error
 import urllib.request
 from dataclasses import dataclass
-from typing import Optional
 
 LANGUAGE_SOURCES = {
     "Go": {
@@ -52,7 +51,7 @@ GITHUB_ACTIONS = [
 try:  # Python 3.11+
     UTC = dt.UTC
 except AttributeError:  # Fallback for older interpreters
-    UTC = dt.timezone.utc
+    UTC = dt.UTC
 
 GH_PATH = shutil.which("gh")
 
@@ -83,7 +82,7 @@ def _gh_api(path: str) -> dict:
         raise RuntimeError(f"gh api {path} returned non-JSON output") from exc
 
 
-def _fetch_json(url: str, headers: Optional[dict[str, str]] = None) -> dict:
+def _fetch_json(url: str, headers: dict[str, str] | None = None) -> dict:
     if headers is None:
         headers = {"User-Agent": USER_AGENT}
     request = urllib.request.Request(url, headers=headers)
@@ -206,7 +205,7 @@ def write_versions_file(path: str) -> None:
         handle.write(markdown + "\n")
 
 
-def _link(label: str, url: Optional[str]) -> str:
+def _link(label: str, url: str | None) -> str:
     if not url:
         return label
     return f"[{label}]({url})"
@@ -224,7 +223,7 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     return parser.parse_args(argv)
 
 
-def main(argv: Optional[list[str]] = None) -> int:
+def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv or sys.argv[1:])
     try:
         write_versions_file(args.output)

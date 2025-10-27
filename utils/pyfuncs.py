@@ -84,14 +84,15 @@ class PythonFunctionExtractor(ast.NodeVisitor):
             return "f"  # function
 
         # Check decorators for special method types
+        decorator_map = {
+            "staticmethod": "s",
+            "classmethod": "c",
+            "property": "p",
+        }
         for decorator in node.decorator_list:
             dec_name = self._get_decorator_name(decorator)
-            if dec_name == "staticmethod":
-                return "s"
-            elif dec_name == "classmethod":
-                return "c"
-            elif dec_name == "property":
-                return "p"
+            if dec_name in decorator_map:
+                return decorator_map[dec_name]
 
         return "m"  # method
 
