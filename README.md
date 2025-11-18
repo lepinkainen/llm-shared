@@ -24,6 +24,7 @@ Standardized development guidelines and tools for LLM assistants.
 **Tools**: The `utils/` directory contains function analysis tools for code exploration:
 
 - `gofuncs.go` - Go function analyzer
+- `go-file-analyzer/main.go` - Go file + function size report (ignores tests) with per-file notes for LLMs
 - `pyfuncs.py` - Python function analyzer
 - `jsfuncs.js` - JavaScript/TypeScript function analyzer
 - `validate-docs.go` - Project structure validator

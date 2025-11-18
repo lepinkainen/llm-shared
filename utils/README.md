@@ -91,6 +91,16 @@ api.ts:45:m:y:fetch:APIClient:async (url:string)=>Response:
 utils.js:23:a:y:helper::(value:number)=>string:
 ```
 
+## go-file-analyzer - Go File Size & Function Report
+
+```bash
+go run ./go-file-analyzer/main.go -dir /path/to/project -n 20 -topfuncs 5
+```
+
+**Purpose**: Lists the longest Go source files by line count, ignoring `_test.go` files and common build artifacts.
+
+**Output**: LLM-friendly summary per file: total lines, type count, method/top-level func counts, length buckets, top functions (lines + stmts), and short notes when things look crowded.
+
 ## Features
 
 - AST parsing for accuracy (Go, Python)
