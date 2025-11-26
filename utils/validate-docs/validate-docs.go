@@ -253,6 +253,7 @@ func validateGoFunctions(config ProjectConfig, projectDir string) []ValidationRe
 	// Find gofuncs.go - try multiple locations
 	var gofuncsPath string
 	locations := []string{
+		filepath.Join(projectDir, "llm-shared", "utils", "gofuncs", "gofuncs.go"), // In llm-shared submodule
 		filepath.Join(projectDir, "utils", "gofuncs", "gofuncs.go"),
 		filepath.Join(projectDir, "..", "gofuncs", "gofuncs.go"),
 		filepath.Join(projectDir, "..", "..", "utils", "gofuncs", "gofuncs.go"),
@@ -329,6 +330,7 @@ func validatePythonFunctions(config ProjectConfig, projectDir string) []Validati
 	// Find pyfuncs.py - try multiple locations
 	var pyfuncsPath string
 	locations := []string{
+		filepath.Join(projectDir, "llm-shared", "utils", "pyfuncs.py"), // In llm-shared submodule
 		filepath.Join(projectDir, "utils", "pyfuncs.py"),
 		filepath.Join(projectDir, "..", "pyfuncs.py"),
 		filepath.Join(projectDir, "..", "..", "utils", "pyfuncs.py"),
