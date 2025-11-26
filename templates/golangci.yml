@@ -15,6 +15,9 @@ linters:
     - misspell
     - gocritic
     - revive
+  exclusions:
+    paths:
+      - llm-shared
   settings:
     govet:
       enable:
