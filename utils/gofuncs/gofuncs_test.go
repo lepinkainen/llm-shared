@@ -5,8 +5,6 @@ import (
 	"os"
 	"path/filepath"
 	"testing"
-
-	"github.com/stretchr/testify/require"
 )
 
 func TestTypeToString(t *testing.T) {
@@ -25,8 +23,13 @@ func TestTypeToString(t *testing.T) {
 	for expr, want := range tests {
 		t.Run(expr, func(t *testing.T) {
 			node, err := parser.ParseExpr(expr)
-			require.NoError(t, err)
-			require.Equal(t, want, typeToString(node))
+			if err != nil {
+				t.Fatalf("ParseExpr failed: %v", err)
+			}
+			got := typeToString(node)
+			if got != want {
+				t.Errorf("typeToString(%q) = %q, want %q", expr, got, want)
+			}
 		})
 	}
 }
@@ -42,26 +45,54 @@ type thing struct{}
 func (t *thing) Do(x int) (string, error) { return "", nil }
 `
 	err := os.WriteFile(filepath.Join(dir, "sample.go"), []byte(source), 0644)
-	require.NoError(t, err)
+	if err != nil {
+		t.Fatalf("WriteFile failed: %v", err)
+	}
 
 	funcs, err := extractFunctions(dir)
-	require.NoError(t, err)
-	require.Len(t, funcs, 2)
+	if err != nil {
+		t.Fatalf("extractFunctions failed: %v", err)
+	}
+	if len(funcs) != 2 {
+		t.Fatalf("extractFunctions returned %d functions, want 2", len(funcs))
+	}
 
 	helper := funcs[0]
-	require.Equal(t, "sample.go", helper.File)
-	require.Equal(t, 3, helper.Line)
-	require.Equal(t, "helper", helper.Name)
-	require.Equal(t, []string{"string"}, helper.Params)
-	require.Equal(t, []string{"error"}, helper.Returns)
+	if helper.File != "sample.go" {
+		t.Errorf("helper.File = %q, want %q", helper.File, "sample.go")
+	}
+	if helper.Line != 3 {
+		t.Errorf("helper.Line = %d, want 3", helper.Line)
+	}
+	if helper.Name != "helper" {
+		t.Errorf("helper.Name = %q, want %q", helper.Name, "helper")
+	}
+	if len(helper.Params) != 1 || helper.Params[0] != "string" {
+		t.Errorf("helper.Params = %v, want [string]", helper.Params)
+	}
+	if len(helper.Returns) != 1 || helper.Returns[0] != "error" {
+		t.Errorf("helper.Returns = %v, want [error]", helper.Returns)
+	}
 
 	method := funcs[1]
-	require.Equal(t, "Do", method.Name)
-	require.Equal(t, "m", method.Type)
-	require.Equal(t, "*thing", method.Receiver)
-	require.Equal(t, []string{"int"}, method.Params)
-	require.Equal(t, []string{"string", "error"}, method.Returns)
-	require.True(t, method.Exported)
+	if method.Name != "Do" {
+		t.Errorf("method.Name = %q, want %q", method.Name, "Do")
+	}
+	if method.Type != "m" {
+		t.Errorf("method.Type = %q, want %q", method.Type, "m")
+	}
+	if method.Receiver != "*thing" {
+		t.Errorf("method.Receiver = %q, want %q", method.Receiver, "*thing")
+	}
+	if len(method.Params) != 1 || method.Params[0] != "int" {
+		t.Errorf("method.Params = %v, want [int]", method.Params)
+	}
+	if len(method.Returns) != 2 || method.Returns[0] != "string" || method.Returns[1] != "error" {
+		t.Errorf("method.Returns = %v, want [string error]", method.Returns)
+	}
+	if !method.Exported {
+		t.Errorf("method.Exported = false, want true")
+	}
 }
 
 func TestFormatFunction(t *testing.T) {
@@ -75,7 +106,11 @@ func TestFormatFunction(t *testing.T) {
 		Returns:  []string{"string"},
 	}
 
-	require.Equal(t, "sample.go:10:f:y:Main:(int)string", formatFunction(fn))
+	got := formatFunction(fn)
+	want := "sample.go:10:f:y:Main:(int)string"
+	if got != want {
+		t.Errorf("formatFunction(fn) = %q, want %q", got, want)
+	}
 
 	method := FunctionInfo{
 		File:     "sample.go",
@@ -87,5 +122,9 @@ func TestFormatFunction(t *testing.T) {
 		Params:   []string{"string", "int"},
 		Returns:  []string{"error"},
 	}
-	require.Equal(t, "sample.go:5:m:n:Do:*Thing:(string,int)error", formatFunction(method))
+	got = formatFunction(method)
+	want = "sample.go:5:m:n:Do:*Thing:(string,int)error"
+	if got != want {
+		t.Errorf("formatFunction(method) = %q, want %q", got, want)
+	}
 }
