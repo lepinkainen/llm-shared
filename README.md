@@ -2,6 +2,16 @@
 
 Standardized development guidelines and tools for LLM assistants.
 
+## ⚠️ Important Note for AI Assistants
+
+**The `llm-shared/` directory is a git submodule that must NOT be modified without explicit permission.**
+
+- Do NOT edit, refactor, or "improve" any files in `llm-shared/`
+- Do NOT add dependencies to code in `llm-shared/` (it must remain stdlib-only)
+- When running tests or linters, exclude the `llm-shared/` directory
+- The submodule is shared across multiple projects and must remain project-independent
+- If issues are found in `llm-shared/`, report them but do not fix them automatically
+
 **For LLMs**:
 
 - Refer to `project_tech_stack.md` for universal development guidelines (project management, validation, common practices)
