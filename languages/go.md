@@ -90,6 +90,9 @@ linters:
     - misspell
     - gocritic
     - revive
+  exclusions:
+    paths:
+      - llm-shared  # Exclude llm-shared submodule from linting
 
 linters-settings:
   govet:
@@ -111,10 +114,6 @@ issues:
     - path: _test\.go
       linters:
         - gosec
-    - path: llm-shared/
-      linters:
-        - gocritic
-        - revive
 ```
 
 ## Project Setup Requirements

@@ -75,18 +75,18 @@ tasks:
   test-go:
     desc: Run Go tests
     cmds:
-      - go test ./... # Don't use -v flag to save context
+      - go test $(go list ./... | grep -v llm-shared) # Don't use -v flag to save context
 
   test-go-ci:
     desc: Run Go tests with coverage for CI
     cmds:
-      - go test -tags=ci -cover -v ./...
+      - go test -tags=ci -cover -v $(go list ./... | grep -v llm-shared)
 
   lint-go:
     desc: Lint Go code
     cmds:
-      - goimports -w .
-      - go vet ./...
+      - find . -name "*.go" -not -path "./llm-shared/*" -exec goimports -w {} +
+      - go vet $(go list ./... | grep -v llm-shared)
       - golangci-lint run # Requires golangci-lint installation
 
   # Python tasks
@@ -100,19 +100,19 @@ tasks:
   test-python:
     desc: Run Python tests
     cmds:
-      - uv run pytest
+      - uv run pytest --ignore=llm-shared
 
   test-python-ci:
     desc: Run Python tests with coverage for CI
     cmds:
-      - uv run pytest --cov=src --cov-report=xml --cov-report=term
+      - uv run pytest --ignore=llm-shared --cov=src --cov-report=xml --cov-report=term
 
   lint-python:
     desc: Lint Python code
     cmds:
-      - uv run ruff check .
-      - uv run ruff format .
-      - uv run mypy .
+      - uv run ruff check . --exclude llm-shared
+      - uv run ruff format . --exclude llm-shared
+      - uv run mypy . --exclude llm-shared
 
   # JavaScript/TypeScript tasks
   build-js:
@@ -135,8 +135,8 @@ tasks:
   lint-js:
     desc: Lint JavaScript/TypeScript code
     cmds:
-      - pnpm run lint
-      - pnpm run format
+      - pnpm run lint --ignore-path=llm-shared
+      - pnpm run format --ignore-path=llm-shared
       - pnpm run typecheck
 
   # Development tasks
