@@ -91,28 +91,31 @@ tasks:
 
   # Python tasks
   build-python:
-    desc: Build Python project
+    desc: Build Python package artifacts
+    deps: [lint, test]
+    silent: true
     cmds:
-      - uv sync
       - mkdir -p {{.BUILD_DIR}}
-      # Add build steps for Python if needed (e.g., PyInstaller)
+      - uv build --wheel --sdist --out-dir {{.BUILD_DIR}} --quiet
 
   test-python:
-    desc: Run Python tests
+    desc: Run tests
+    silent: true
     cmds:
-      - uv run pytest --ignore=llm-shared
+      - uv run python -m pytest --ignore=llm-shared -q -p no:warnings
 
   test-python-ci:
-    desc: Run Python tests with coverage for CI
+    desc: Run tests with coverage for CI
     cmds:
-      - uv run pytest --ignore=llm-shared --cov=src --cov-report=xml --cov-report=term
+      - uv run python -m pytest --ignore=llm-shared --cov=src --cov-report=xml --cov-report=term
 
   lint-python:
-    desc: Lint Python code
+    desc: Run linters and type checks with auto-fix
+    silent: true
     cmds:
-      - uv run ruff check . --exclude llm-shared
-      - uv run ruff format . --exclude llm-shared
-      - uv run mypy . --exclude llm-shared
+      - uv run ruff check . --exclude llm-shared --quiet --fix
+      - uv run ruff format . --exclude llm-shared --quiet
+      - uv run mypy . --exclude llm-shared --no-error-summary
 
   # JavaScript/TypeScript tasks
   build-js:
