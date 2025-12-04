@@ -91,6 +91,24 @@ api.ts:45:m:y:fetch:APIClient:async (url:string)=>Response:
 utils.js:23:a:y:helper::(value:number)=>string:
 ```
 
+## py-file-analyzer - Python File Size & Function Report
+
+```bash
+python py-file-analyzer/main.py -dir /path/to/project -n 20 -topfuncs 5
+```
+
+**Purpose**: Lists the longest Python source files by line count, ignoring test files, `__init__.py` files, and common build artifacts.
+
+**Output**: LLM-friendly summary per file: total lines, class count, method/top-level func counts, function length buckets, top functions (lines + statements), and refactoring notes.
+
+**Features**:
+- AST parsing for accurate function boundaries and statement counting
+- Complexity analysis with configurable buckets
+- Automatic refactoring suggestions
+- Mixed concern detection (web + database, async + sync)
+- Class and method organization analysis
+- Smart filtering (excludes tests, __init__.py, generated code)
+
 ## go-file-analyzer - Go File Size & Function Report
 
 ```bash
@@ -109,5 +127,5 @@ go run ./go-file-analyzer/main.go -dir /path/to/project -n 20 -topfuncs 5
 - Sorted by file then line number
 - Language-specific features:
   - **Go**: Full AST parsing, methods, receivers, type information
-  - **Python**: Async functions, decorators, type hints, class methods
+  - **Python**: Full AST parsing, async functions, decorators, type hints, class methods
   - **JavaScript/TypeScript**: Arrow functions, async/await, class methods, generators
