@@ -5,7 +5,19 @@ version: '3'
 vars:
   BUILD_DIR: build
   PROJECT_NAME: my-project
-  VERSION: 1.0.0
+  # VERSION dynamically extracts from git tags and commits:
+  # - If tags exist: "v1.0.0-abc1234" (tag + commit hash)
+  # - No tags: "dev-2025-12-17_14:30:00" (timestamped dev build)
+  # - Injected into Go binaries via -ldflags="-X main.Version={{.VERSION}}"
+  VERSION:
+    sh: |
+      tag=$(git describe --tags 2>/dev/null || echo "dev")
+      commit=$(git log -n 1 --format=%h)
+      if [ "$tag" = "dev" ]; then
+        echo "dev-$(date '+%Y-%m-%d_%H:%M:%S')"
+      else
+        echo "$tag-$commit"
+      fi
 
 tasks:
   # Core build task - depends on tests and linting
@@ -70,7 +82,11 @@ tasks:
     desc: Build Go project
     cmds:
       - mkdir -p {{.BUILD_DIR}}
-      - go build -o {{.BUILD_DIR}}/{{.PROJECT_NAME}} ./cmd/main.go
+      - go build -v -ldflags="-X main.Version={{.VERSION}}" -o {{.BUILD_DIR}}/{{.PROJECT_NAME}} main.go
+    sources:
+      - ./*.go
+    generates:
+      - "{{.BUILD_DIR}}/{{.PROJECT_NAME}}"
 
   test-go:
     desc: Run Go tests
