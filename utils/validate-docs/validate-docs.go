@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"slices"
 	"strings"
 )
 
@@ -403,12 +404,7 @@ func validatePythonFunctions(config ProjectConfig, projectDir string) []Validati
 // isStandardDirectory checks if a directory is considered standard/required
 func isStandardDirectory(dir string) bool {
 	standardDirs := []string{"cmd", "internal", "pkg", "src"}
-	for _, std := range standardDirs {
-		if dir == std {
-			return true
-		}
-	}
-	return false
+	return slices.Contains(standardDirs, dir)
 }
 
 // printResults displays validation results
