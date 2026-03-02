@@ -14,6 +14,7 @@ Standardized development guidelines and tools for LLM assistants.
 
 **For LLMs**:
 
+- Refer to `PROJECT.md` (in the project root, not this submodule) for the broad purpose, current state, and intended direction of the project. This file is project-specific and should be the first thing you read to understand what the project is and where it is going.
 - Refer to `project_tech_stack.md` for universal development guidelines (project management, validation, common practices)
 - Refer to `GITHUB.md` for GitHub issue management (creating, reading, and managing issues)
 - Refer to `shell_commands.md` for modern shell tool usage (`rg` instead of `grep`, `fd` instead of `find`)
