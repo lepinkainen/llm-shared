@@ -40,6 +40,16 @@ When looking for functions, use the `jsfuncs` tool to list all functions in a Ja
   - GitHub Actions: use `pnpm/action-setup@v4` before `actions/setup-node@v4` with `cache: 'pnpm'`
 - **npm/yarn**: Do not use — migrate existing projects to pnpm
 
+#### .npmrc
+
+Create an `.npmrc` file in the project root to configure package manager behavior. At minimum, add `minPackageAge` to mitigate supply-chain attacks by rejecting packages published too recently:
+
+```ini
+# Require packages to be at least 3 days old before installing
+# This mitigates supply-chain attacks by avoiding newly published (potentially malicious) packages
+minPackageAge=3d
+```
+
 ### Development Tools
 
 - **Deno**: Built-in TypeScript, testing, formatting, linting
