@@ -105,6 +105,75 @@ Toggle("My Toggle", isOn: Binding(
 ))
 ```
 
+### App Icons for SPM-Based Apps
+
+macOS uses the app bundle's icon (from `Contents/Resources/`) for notifications, Activity Monitor, and other system UI. `NSApp.applicationIconImage` is a runtime-only property — it does **not** affect notifications.
+
+**Steps:**
+
+1. **Generate `.icns` from a source PNG** (ideally 1024x1024):
+
+```bash
+mkdir -p AppIcon.iconset
+for size in 16 32 64 128 256 512 1024; do
+    sips -z $size $size source.png --out AppIcon.iconset/icon_${size}x${size}.png
+done
+# Create @2x variants
+cp AppIcon.iconset/icon_32x32.png   AppIcon.iconset/icon_16x16@2x.png
+cp AppIcon.iconset/icon_64x64.png   AppIcon.iconset/icon_32x32@2x.png
+cp AppIcon.iconset/icon_256x256.png AppIcon.iconset/icon_128x128@2x.png
+cp AppIcon.iconset/icon_512x512.png AppIcon.iconset/icon_256x256@2x.png
+cp AppIcon.iconset/icon_1024x1024.png AppIcon.iconset/icon_512x512@2x.png
+rm AppIcon.iconset/icon_64x64.png AppIcon.iconset/icon_1024x1024.png
+iconutil -c icns AppIcon.iconset -o AppIcon.icns
+```
+
+2. **Add `CFBundleIconFile` to `Info.plist`** (without the `.icns` extension):
+
+```xml
+<key>CFBundleIconFile</key>
+<string>AppIcon</string>
+```
+
+3. **Copy the `.icns` into the `.app` bundle** during packaging:
+
+```yaml
+# Taskfile / build script
+- cp path/to/AppIcon.icns build/MyApp.app/Contents/Resources/
+```
+
+4. **Re-sign the app** after modifying the bundle:
+
+```bash
+codesign --sign - --force build/MyApp.app
+```
+
+5. **Launch via `open -W`** in launchd plists — if the binary is launched directly (`Contents/MacOS/MyApp`), macOS doesn't associate the process with the `.app` bundle, so the bundle icon won't appear in notifications:
+
+```xml
+<!-- CORRECT — LaunchServices associates process with .app bundle -->
+<key>ProgramArguments</key>
+<array>
+    <string>/usr/bin/open</string>
+    <string>-W</string>
+    <string>/Applications/MyApp.app</string>
+</array>
+
+<!-- WRONG — direct binary launch, no bundle association -->
+<key>ProgramArguments</key>
+<array>
+    <string>/Applications/MyApp.app/Contents/MacOS/MyApp</string>
+</array>
+```
+
+The `-W` flag makes `open` wait for the app to quit, so `KeepAlive` in launchd still works correctly.
+
+**Common mistakes:**
+- Launching the binary directly from launchd instead of using `open -W` — the process won't be associated with the `.app` bundle
+- Using `NSApp.applicationIconImage` — this only affects the Dock icon at runtime, not notifications
+- Using `UNNotificationAttachment` — this adds media content to the notification body, it does not set the app icon badge
+- Forgetting to re-sign after adding the icon to the bundle
+
 ### Platform & Package Manager
 
 - Use Swift Package Manager (SPM) with `Package.swift`
