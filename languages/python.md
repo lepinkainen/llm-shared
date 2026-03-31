@@ -15,3 +15,4 @@ Always target the Python version recorded in `versions.md` unless a project-spec
 - Use "uv" for dependency management (similar to pipenv)
 - Use "ruff" for linting and formatting
 - Use "mypy" for type checking as much as possible
+- Use "niquests" instead of "requests" for HTTP clients (https://github.com/jawah/niquests)
