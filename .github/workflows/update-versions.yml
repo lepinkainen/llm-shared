@@ -26,21 +26,12 @@ jobs:
       - name: Update versions.md
         run: python scripts/update_versions.py
 
-      - name: Commit changes
-        id: commit-changes
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "chore: refresh tool versions"
-          commit_user_name: llm-shared-bot
-          commit_user_email: 41898282+github-actions[bot]@users.noreply.github.com
-          branch: update/toolchain-versions
-          create_branch: true
-          push_options: "--force-if-includes"
-
       - name: Create pull request
-        if: steps.commit-changes.outputs.changes_detected == 'true'
         uses: peter-evans/create-pull-request@v6
         with:
+          commit-message: "chore: refresh tool versions"
+          committer: llm-shared-bot <41898282+github-actions[bot]@users.noreply.github.com>
+          author: lepinkainen <58150+lepinkainen@users.noreply.github.com>
           branch: update/toolchain-versions
           delete-branch: true
           title: "chore: refresh tool versions"
