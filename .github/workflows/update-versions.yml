@@ -24,6 +24,8 @@ jobs:
           python-version: "3.x"
 
       - name: Update versions.md
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: python scripts/update_versions.py
 
       - name: Create pull request
