@@ -54,8 +54,15 @@ When looking for functions, use the `gofuncs` tool to list all functions in a Go
 Install required tools:
 
 ```bash
+# Formatting + primary linter
 go install golang.org/x/tools/cmd/goimports@latest
 go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+
+# Advisory tools (run separately, not gated on lint)
+go install golang.org/x/vuln/cmd/govulncheck@latest      # CVE scanner
+go install golang.org/x/tools/cmd/deadcode@latest        # unreachable funcs
+go install github.com/uudashr/gocognit/cmd/gocognit@latest # cognitive complexity
+# `jq` is also required to render gocognit JSON output (brew install jq / apt install jq)
 ```
 
 ### Formatting
@@ -69,52 +76,88 @@ go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
 - Configure with `.golangci.yml` in project root
 - Modern govet shadow detection: use `enable: [shadow]` not deprecated `check-shadowing: true`
 
-Example `.golangci.yml`:
+A ready-to-copy v2 config lives at `templates/golangci.yml`. Reproduced here for reference:
 
 ```yaml
+version: "2"
+
 run:
   timeout: 5m
-  tests: true
+  issues-exit-code: 1
+  tests: false # No point in linting tests
 
 linters:
   enable:
-    - gofmt
-    - goimports
     - govet
     - errcheck
     - staticcheck
     - unused
-    - gosimple
     - ineffassign
-    - typecheck
     - misspell
     - gocritic
     - revive
+    - errorlint     # forces errors.Is / errors.As over == comparison
+    - bodyclose     # catches missing resp.Body.Close()
+    - contextcheck  # context.Context propagation
+    - sqlclosecheck # *sql.Rows / *sql.Stmt close hygiene
+    - noctx         # HTTP requests without a context
+    - gosec         # common security smells
+    - unparam       # always-nil error returns, unused params
+    - gocyclo       # cyclomatic complexity guard
   exclusions:
     paths:
-      - llm-shared  # Exclude llm-shared submodule from linting
-
-linters-settings:
-  govet:
-    enable:
-      - shadow
-  gocritic:
-    enabled-tags:
-      - diagnostic
-      - experimental
-      - opinionated
-      - performance
-      - style
-    disabled-checks:
-      - exitAfterDefer # CLI apps often exit after defer
-      - rangeValCopy # Sometimes acceptable for readability
+      - llm-shared
+  settings:
+    govet:
+      enable:
+        - shadow
+    gocyclo:
+      min-complexity: 15 # raise if existing codebase has many large funcs
+    gocritic:
+      enabled-tags:
+        - diagnostic
+        - experimental
+        - opinionated
+        - performance
+        - style
+      disabled-checks:
+        - exitAfterDefer
+        - rangeValCopy
+        - hugeParam
+        - singleCaseSwitch
+        - ifElseChain
+        - paramTypeCombine
+    revive:
+      severity: warning
+      rules:
+        - name: exported
+          severity: warning
+          disabled: false
+          arguments:
+            - "checkPrivateReceivers"
+            - "sayRepetitiveInsteadOfStutters"
 
 issues:
-  exclude-rules:
-    - path: _test\.go
-      linters:
-        - gosec
+  max-issues-per-linter: 0
+  max-same-issues: 0
 ```
+
+#### Linter notes
+
+- **gocyclo**: starts at `min-complexity: 15`. If an existing codebase has many over-threshold funcs, raise the bound temporarily and ratchet down. Refactor by extracting helpers — closures-in-closures and chained `if err != nil` blocks are the usual culprits.
+- **unparam**: flags always-nil error returns and unused parameters. Fix by changing the signature; do not silence.
+- **gosec**: noisy on `cmd/` entrypoints and test utilities. Path-scope exclusions are cleaner than `// #nosec` annotations.
+- **noctx**: legitimately violated by DB-driver init code. Use a path-scoped exclusion for those files rather than disabling project-wide.
+
+### Advisory tooling (not gated on lint)
+
+These run as separate `task` targets and are NOT part of `task lint`, so a regression won't block the build. Wire them up in CI or run on demand.
+
+- **govulncheck** — `task vuln-go` — scans the import graph against the Go vulnerability DB. Reports only vulns that your code actually reaches.
+- **deadcode** — `task deadcode-go` — reports unreachable functions. Note: interface-satisfying methods that are never invoked (only used to prove compile-time interface compliance via `var _ Iface = (*T)(nil)`) appear as false positives — these are expected.
+- **gocognit** — `task cognit-go` — reports functions with cognitive complexity > 20 plus per-branch diagnostics showing each contributing branch and its nesting depth. Cognit catches what gocyclo misses: nested closures, multi-level loops, and deep conditional pyramids.
+
+Cognit vs. cyclo, in short: cyclomatic counts branches; cognitive multiplies by nesting depth. A function with 30 sequential `if` blocks scores 31 on cyclo but ~30 on cognit; a function with 5 triple-nested `if`s scores ~15 on cyclo but ~25 on cognit. Use both.
 
 ## Project Setup Requirements
 

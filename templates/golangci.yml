@@ -15,6 +15,14 @@ linters:
     - misspell
     - gocritic
     - revive
+    - errorlint     # catches err == ErrFoo style comparisons (use errors.Is)
+    - bodyclose     # missing res.Body.Close() on HTTP responses
+    - contextcheck  # context.Context propagation
+    - sqlclosecheck # *sql.Rows / *sql.Stmt close checks
+    - noctx         # HTTP requests without context
+    - gosec         # common security smells
+    - unparam       # always-nil error returns, unused params
+    - gocyclo       # cyclomatic complexity guard
   exclusions:
     paths:
       - llm-shared
@@ -22,6 +30,8 @@ linters:
     govet:
       enable:
         - shadow
+    gocyclo:
+      min-complexity: 15 # raise if existing codebase has many large funcs
     gocritic:
       enabled-tags:
         - diagnostic
