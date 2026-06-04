@@ -24,10 +24,9 @@ jobs:
           cache: true # Automatically caches go.mod/go.sum dependencies
 
       - name: Install Task
-        uses: arduino/setup-task@v2
+        uses: go-task/setup-task@v2
         with:
           version: 3.x
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install Go tools
         run: |
@@ -69,10 +68,9 @@ jobs:
           cache: true
 
       - name: Install Task
-        uses: arduino/setup-task@v2
+        uses: go-task/setup-task@v2
         with:
           version: 3.x
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build
         run: task build-ci

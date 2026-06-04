@@ -17,7 +17,7 @@ _Last updated: 2025-09-25 22:14 UTC_
 | --- | --- |
 | [actions/checkout](https://github.com/actions/checkout) | v5.0.0 |
 | [actions/setup-go](https://github.com/actions/setup-go) | v6.0.0 |
-| [arduino/setup-task](https://github.com/arduino/setup-task) | v2.0.0 |
+| [go-task/setup-task](https://github.com/go-task/setup-task) | v2.1.0 |
 | [golangci/golangci-lint-action](https://github.com/golangci/golangci-lint-action) | v8.0.0 |
 | [codecov/codecov-action](https://github.com/codecov/codecov-action) | v5.5.1 |
 | [pnpm/action-setup](https://github.com/pnpm/action-setup) | v4.1.0 |

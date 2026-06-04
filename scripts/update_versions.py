@@ -37,7 +37,7 @@ GITHUB_BASE = "https://github.com"
 GITHUB_ACTIONS = [
     "actions/checkout",
     "actions/setup-go",
-    "arduino/setup-task",
+    "go-task/setup-task",
     "golangci/golangci-lint-action",
     "codecov/codecov-action",
     "pnpm/action-setup",
