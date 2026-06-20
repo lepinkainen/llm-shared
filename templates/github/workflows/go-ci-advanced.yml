@@ -68,7 +68,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version: '1.25' # Keep in sync with versions.md
+          go-version-file: go.mod # Reads version from go.mod (single source of truth)
           cache: true
 
       - name: golangci-lint
@@ -82,7 +82,6 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        go-version: [1.25]
     runs-on: ${{ matrix.os }}
     needs: [test, lint]
 
@@ -92,7 +91,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version: ${{ matrix.go-version }} # Keep matrix values aligned with versions.md
+          go-version-file: go.mod # Reads version from go.mod (single source of truth)
           cache: true
 
       - name: Install Task (Unix)
@@ -131,7 +130,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version: '1.25' # Keep in sync with versions.md
+          go-version-file: go.mod # Reads version from go.mod (single source of truth)
           cache: true
 
       - name: Run gosec security scanner

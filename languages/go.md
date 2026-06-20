@@ -177,6 +177,18 @@ Use the provided `templates/github/workflows/go-ci.yml` as a starting point. The
 - **Performance**: Built-in Go module caching via `actions/setup-go@v5`
 - **Modern tooling**: golangci-lint-action for efficient linting
 
+**ALWAYS use `go-version-file: go.mod`** in `actions/setup-go` instead of pinning a literal version (`go-version: '1.25'`). `go.mod` is the single source of truth; pinning a separate version in the workflow drifts out of sync and breaks CI when `go.mod` requires a newer toolchain than the workflow installs (`go.mod requires go >= X (running go Y)`).
+
+```yaml
+- name: Set up Go
+  uses: actions/setup-go@v5
+  with:
+    go-version-file: go.mod # Reads version from go.mod (single source of truth)
+    cache: true
+```
+
+The only exception is matrix builds that deliberately test several Go versions (see below) — there the matrix value is the source of truth.
+
 **IMPORTANT**: The `build-ci` task should ONLY compile/build the application. Do NOT add dependencies on `test` or `lint` tasks in `build-ci`. The CI workflow manages job dependencies via `needs: [test, lint]` on the build job. This ensures:
 
 - Clean separation of concerns (test job tests, lint job lints, build job builds)
