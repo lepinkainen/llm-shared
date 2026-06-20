@@ -257,6 +257,105 @@ act -j test  # Run specific job
 act          # Run entire workflow
 ```
 
+## Releasing with GoReleaser
+
+[GoReleaser](https://goreleaser.com) builds cross-platform binaries, packages
+them into archives, generates checksums, and publishes a GitHub Release with
+auto-generated release notes — all from a single git tag.
+
+### Workflow
+
+Releases are triggered by pushing a tag, **not** on every push to `master`.
+Keep release CI separate from the normal test/lint/build CI:
+
+```bash
+git tag v1.2.0
+git push origin v1.2.0   # → triggers the Release workflow
+```
+
+Use `templates/github/workflows/go-release.yml` as a starting point. It runs on
+`push: tags: ['v*']`, needs `permissions: contents: write` (to upload assets),
+and reads the Go version from `go.mod` (`go-version-file: go.mod`).
+
+### Config (`.goreleaser.yaml`)
+
+```yaml
+version: 2
+
+before:
+  hooks:
+    - go mod tidy
+
+builds:
+  - id: myapp
+    binary: myapp
+    env:
+      - CGO_ENABLED=0           # static binaries, no libc dependency
+    goos: [linux, darwin, windows]
+    goarch: [amd64, arm64]
+    ldflags:
+      - -s -w -X main.Version={{.Version}}   # strip + inject version
+
+archives:
+  - id: myapp
+    formats: [tar.gz]
+    name_template: '{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}'
+    format_overrides:
+      - goos: windows
+        formats: [zip]
+
+checksum:
+  name_template: checksums.txt
+
+release:
+  draft: false
+  prerelease: auto    # tags like v1.0.0-rc1 are flagged pre-release
+```
+
+Validate locally without tagging:
+
+```bash
+goreleaser check                       # lint the config
+goreleaser release --snapshot --clean  # build everything to ./dist, no publish
+```
+
+### Changelog grouping (important)
+
+GoReleaser derives the changelog from commits **between the previous tag and the
+current one**. Group and filter them so release notes stay readable. This relies
+on [Conventional Commits](https://www.conventionalcommits.org) (`feat:`, `fix:`,
+`ci:`, …):
+
+```yaml
+changelog:
+  sort: asc
+  filters:
+    exclude:          # drop noise entirely
+      - "^docs:"
+      - "^test:"
+      - "^chore:"
+      - "^ci:"
+  groups:             # bucket the rest into titled sections
+    - title: Features
+      regexp: '^.*?feat(\(.+\))??!?:.+$'
+      order: 0
+    - title: Bug fixes
+      regexp: '^.*?fix(\(.+\))??!?:.+$'
+      order: 1
+    - title: Others    # no regexp = catch-all
+      order: 999
+```
+
+- `order` sorts the sections; `sort: asc` orders commits within a section.
+- A group with no `regexp` is the catch-all — put it last with a high `order`.
+- `filters.exclude` removes commits before grouping; `include` (mutually
+  exclusive) keeps only matching commits.
+- Other options: `abbrev: 7` to truncate SHAs (`-1` drops them), `use: github`
+  to pull PR titles via the compare API, or `use: github-native` to delegate to
+  GitHub's own auto-generated notes.
+- The **first** release sweeps the entire history (no previous tag), so it will
+  look noisy regardless. Subsequent tagged releases only show the delta.
+
 ## General Guidelines for Go
 
 - Always run `goimports -w .` on Go code files after making changes
