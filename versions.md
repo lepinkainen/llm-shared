@@ -15,10 +15,10 @@ _Last updated: 2025-09-25 22:14 UTC_
 
 | Action | Latest Tag |
 | --- | --- |
-| [actions/checkout](https://github.com/actions/checkout) | v5.0.0 |
+| [actions/checkout](https://github.com/actions/checkout) | v7.0.0 |
 | [actions/setup-go](https://github.com/actions/setup-go) | v6.0.0 |
 | [go-task/setup-task](https://github.com/go-task/setup-task) | v2.1.0 |
-| [golangci/golangci-lint-action](https://github.com/golangci/golangci-lint-action) | v8.0.0 |
+| [golangci/golangci-lint-action](https://github.com/golangci/golangci-lint-action) | v9.0.0 |
 | [codecov/codecov-action](https://github.com/codecov/codecov-action) | v5.5.1 |
 | [pnpm/action-setup](https://github.com/pnpm/action-setup) | v4.1.0 |
 | [actions/setup-node](https://github.com/actions/setup-node) | v5.0.0 |
