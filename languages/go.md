@@ -70,6 +70,24 @@ go install github.com/uudashr/gocognit/cmd/gocognit@latest # cognitive complexit
 - Always run `goimports -w .` on Go code files after making changes
 - IMPORTANT: DD NOT use `gofmt` - `goimports` is superior and standard
 
+### Modernization with `go fix`
+
+`go fix` (Go 1.26+) rewrites code to modern idioms: the `max`/`min` builtins,
+range-over-int loops, `slices`/`maps` helpers, `strings.FieldsSeq`, and more.
+
+Run it in `task lint` as a mutating formatter, just like `goimports`. Put it before
+`goimports` so any imports the rewrites add land correctly formatted:
+
+```yaml
+lint:
+  cmds:
+    - go fix ./...
+    - goimports -w .
+    - golangci-lint run
+    - go vet ./...
+    - go mod tidy
+```
+
 ### Linting with golangci-lint
 
 - Use golangci-lint for comprehensive code quality checks
