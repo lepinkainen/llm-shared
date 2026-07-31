@@ -81,11 +81,22 @@ Run it in `task lint` as a mutating formatter, just like `goimports`. Put it bef
 ```yaml
 lint:
   cmds:
-    - go fix ./...
+    - go fix {{.GO_PACKAGES}}
     - goimports -w .
     - golangci-lint run
     - go vet ./...
     - go mod tidy
+```
+
+`go fix` mutates source, so scope it to your own packages. When `llm-shared` is
+vendored as a submodule its `utils/` are part of the module, and a bare `./...`
+would rewrite that checked-out submodule and leave it dirty. Exclude it with a
+package-list var:
+
+```yaml
+vars:
+  GO_PACKAGES:
+    sh: go list ./... | grep -v '/llm-shared/' | tr '\n' ' '
 ```
 
 ### Linting with golangci-lint
