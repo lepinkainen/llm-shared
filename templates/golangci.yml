@@ -30,6 +30,7 @@ linters:
     govet:
       enable:
         - shadow
+        - nilness # tautological nil checks, nil-pointer derefs; gopls flags these but plain govet does not
     gocyclo:
       min-complexity: 15 # raise if existing codebase has many large funcs
     gocritic:
