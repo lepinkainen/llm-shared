@@ -1,5 +1,10 @@
 # Swift Guidelines
 
+For SwiftUI framework behavior — hosting/constraint crashes, layout,
+state/observation, lists, typography, windows, testing strategy — see
+[`swiftui.md`](swiftui.md). This file covers Swift-the-language, AppKit
+menu-bar apps, and packaging.
+
 ## macOS Menu Bar (Tray) Applications
 
 ### Entry Point — Use SwiftUI @main with @NSApplicationDelegateAdaptor

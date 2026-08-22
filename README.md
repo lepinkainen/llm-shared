@@ -23,7 +23,8 @@ Standardized development guidelines and tools for LLM assistants.
   - `languages/go.md` - Go libraries, tools, and conventions
   - `languages/python.md` - Python libraries, tools, and conventions
   - `languages/javascript.md` - JavaScript/TypeScript libraries, frameworks, and tools
-  - `languages/swift.md` - Swift/SwiftUI conventions, macOS menu bar apps
+  - `languages/swift.md` - Swift language conventions, macOS menu bar apps, packaging
+  - `languages/swiftui.md` - SwiftUI framework behavior: hosting crashes, layout, state, lists, testing
 
 **Templates**: The `templates/` directory contains starter files and configuration templates:
 
