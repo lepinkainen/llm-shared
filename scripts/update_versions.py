@@ -1,15 +1,27 @@
-#!/usr/bin/env python3
-"""Update versions.md with latest language and GitHub Actions versions."""
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.12"
+# ///
+"""Update versions.md with latest language and GitHub Actions versions.
+
+Standard library only, by design: this repository takes no dependencies. The
+inline metadata block above exists so the file runs as-is via `uv run` or
+directly as `./scripts/update_versions.py`.
+
+Requires the `gh` CLI on PATH for GitHub Action release tags.
+"""
 
 from __future__ import annotations
 
 import argparse
 import datetime as dt
 import json
+import re
 import shutil
 import subprocess
 import sys
 import textwrap
+import time
 import urllib.error
 import urllib.request
 from dataclasses import dataclass
@@ -61,6 +73,56 @@ if GH_PATH is None:
 USER_AGENT = "llm-shared-version-bot/1.0"
 
 END_OF_LIFE_URL = "https://endoflife.date/api/v1/products/{id}/releases/latest"
+
+
+ATTEMPTS = 3
+RETRY_DELAY_SECONDS = 2
+
+TABLE_ROW = re.compile(r"^\|\s*\[([^\]]+)\]\([^)]*\)\s*\|\s*(\S+)\s*\|\s*$")
+
+
+def _retry(what: str, fn):
+    """Call fn, retrying transient failures.
+
+    The upstream APIs flake often enough that a single failed call used to
+    overwrite a known-good version with "unknown", and the scheduled workflow
+    would then open a pull request erasing a pin.
+    """
+    last: Exception | None = None
+    for attempt in range(1, ATTEMPTS + 1):
+        try:
+            return fn()
+        except Exception as exc:  # pylint: disable=broad-except
+            last = exc
+            if attempt < ATTEMPTS:
+                print(
+                    f"Retrying {what} after error ({attempt}/{ATTEMPTS}): {exc}",
+                    file=sys.stderr,
+                )
+                time.sleep(RETRY_DELAY_SECONDS * attempt)
+    raise RuntimeError(f"{what} failed after {ATTEMPTS} attempts: {last}")
+
+
+def read_existing_versions(path: str) -> dict[str, str]:
+    """Map the label in each existing table row to its recorded version.
+
+    Used as a fallback so a failed lookup keeps the previous value rather than
+    degrading the table to "unknown".
+    """
+    try:
+        with open(path, encoding="utf-8") as handle:
+            text = handle.read()
+    except OSError:
+        return {}
+
+    existing: dict[str, str] = {}
+    for line in text.splitlines():
+        match = TABLE_ROW.match(line)
+        if match:
+            label, version = match.group(1), match.group(2)
+            if version != "unknown":
+                existing[label] = version
+    return existing
 
 
 def _gh_api(path: str) -> dict:
@@ -136,29 +198,39 @@ class ActionRecord:
     url: str
 
 
-def collect_language_versions() -> list[VersionRecord]:
+def _resolve(label: str, previous: dict[str, str], fn) -> str:
+    """Look up a version, falling back to the previously recorded one.
+
+    Returns "unknown" only when the lookup fails and no earlier value exists.
+    """
+    try:
+        return _retry(f"lookup for {label}", fn)
+    except Exception as exc:  # pylint: disable=broad-except
+        kept = previous.get(label)
+        if kept:
+            print(
+                f"Warning: could not fetch {label} version ({exc}); keeping {kept}",
+                file=sys.stderr,
+            )
+            return kept
+        print(f"Warning: could not fetch {label} version: {exc}", file=sys.stderr)
+        return "unknown"
+
+
+def collect_language_versions(previous: dict[str, str]) -> list[VersionRecord]:
     records: list[VersionRecord] = []
     for name, meta in LANGUAGE_SOURCES.items():
-        try:
-            version = _latest_endoflife_version(meta["id"])
-        except Exception as exc:  # pylint: disable=broad-except
-            print(f"Warning: could not fetch {name} version: {exc}", file=sys.stderr)
-            version = "unknown"
+        version = _resolve(
+            name, previous, lambda meta=meta: _latest_endoflife_version(meta["id"])
+        )
         records.append(VersionRecord(name=name, version=version, source=meta["notes"]))
     return records
 
 
-def collect_action_versions() -> list[ActionRecord]:
+def collect_action_versions(previous: dict[str, str]) -> list[ActionRecord]:
     records: list[ActionRecord] = []
     for repo in GITHUB_ACTIONS:
-        try:
-            version = _latest_action_tag(repo)
-        except Exception as exc:  # pylint: disable=broad-except
-            print(
-                f"Warning: could not fetch {repo} action version: {exc}",
-                file=sys.stderr,
-            )
-            version = "unknown"
+        version = _resolve(repo, previous, lambda repo=repo: _latest_action_tag(repo))
         url = f"{GITHUB_BASE}/{repo}"
         records.append(ActionRecord(repo=repo, version=version, url=url))
     return records
@@ -189,7 +261,7 @@ def render_markdown(languages: list[VersionRecord], actions: list[ActionRecord])
     lines.append(
         textwrap.dedent(
             """\
-        > Run `python scripts/update_versions.py` locally to refresh this table immediately.
+        > Run `./scripts/update_versions.py` locally to refresh this table immediately.
         """
         ).strip()
     )
@@ -198,8 +270,9 @@ def render_markdown(languages: list[VersionRecord], actions: list[ActionRecord])
 
 
 def write_versions_file(path: str) -> None:
-    languages = collect_language_versions()
-    actions = collect_action_versions()
+    previous = read_existing_versions(path)
+    languages = collect_language_versions(previous)
+    actions = collect_action_versions(previous)
     markdown = render_markdown(languages, actions)
     with open(path, "w", encoding="utf-8") as handle:
         handle.write(markdown + "\n")
