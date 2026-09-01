@@ -48,7 +48,7 @@ This project uses [Task](https://taskfile.dev/) for build automation. See `Taskf
 
 ### Requirements
 
-- Go 1.21+ / Python 3.11+ / Node.js 18+
+- Go 1.27+ / Python 3.14+ / Node.js 26+
 - Task (install from https://taskfile.dev/)
 
 ### Project Structure

@@ -37,7 +37,7 @@ When looking for functions, use the `jsfuncs` tool to list all functions in a Ja
   - Use `pnpm.overrides` (not `resolutions`) for forcing dependency versions
   - Use `pnpm.onlyBuiltDependencies` to approve native build scripts
   - Run `pnpm install`, `pnpm build`, `pnpm lint`, etc.
-  - GitHub Actions: use `pnpm/action-setup@v4` before `actions/setup-node@v4` with `cache: 'pnpm'`
+  - GitHub Actions: use `pnpm/action-setup@v6` before `actions/setup-node@v7` with `cache: 'pnpm'`
 - **npm/yarn**: Do not use — migrate existing projects to pnpm
 
 #### .npmrc

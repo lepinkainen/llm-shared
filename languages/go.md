@@ -6,7 +6,18 @@ Be aware of file sizes, if a single file grows too large, suggest splitting it i
 
 ## Go versioning
 
-Always use the Go toolchain listed in `versions.md`, which is kept in sync with the latest stable release.
+**Always track the latest minor release of Go.** Go's compatibility promise means a
+new minor version does not break working code, so there is no reason to sit on an
+older one. Upgrade as soon as a release is out rather than pinning to whatever a
+project started on.
+
+Use the Go toolchain listed in `versions.md`, which is kept in sync with the latest
+stable release. If `versions.md` is behind, refresh it with
+`./scripts/update_versions.py`.
+
+Write the `go` directive in `go.mod` as `major.minor` (`go 1.27`), never with a patch
+component (`go 1.27.0`). A patch-level directive forces every other machine and CI
+runner to download a matching toolchain before it can build.
 
 You can check the locally installed Go version with:
 
@@ -203,14 +214,14 @@ Cognit vs. cyclo, in short: cyclomatic counts branches; cognitive multiplies by 
 Use the provided `templates/github/workflows/go-ci.yml` as a starting point. The template includes:
 
 - **Parallel jobs**: Separate test, lint, and build jobs for faster feedback
-- **Performance**: Built-in Go module caching via `actions/setup-go@v5`
+- **Performance**: Built-in Go module caching via `actions/setup-go@v7`
 - **Modern tooling**: golangci-lint-action for efficient linting
 
 **ALWAYS use `go-version-file: go.mod`** in `actions/setup-go` instead of pinning a literal version (`go-version: '1.25'`). `go.mod` is the single source of truth; pinning a separate version in the workflow drifts out of sync and breaks CI when `go.mod` requires a newer toolchain than the workflow installs (`go.mod requires go >= X (running go Y)`).
 
 ```yaml
 - name: Set up Go
-  uses: actions/setup-go@v5
+  uses: actions/setup-go@v7
   with:
     go-version-file: go.mod # Reads version from go.mod (single source of truth)
     cache: true
@@ -272,7 +283,7 @@ For libraries or cross-platform tools, consider testing multiple Go versions:
 ```yaml
 strategy:
   matrix:
-    go-version: [1.23, 1.24]
+    go-version: [1.26, 1.27]
     os: [ubuntu-latest, windows-latest, macos-latest]
 ```
 

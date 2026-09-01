@@ -82,7 +82,7 @@ See `templates/docker/Dockerfile-go-pure` for a complete example.
 
 ```dockerfile
 # Stage 1: Build
-FROM golang:1.25-alpine AS builder
+FROM golang:1.27-alpine AS builder
 # ... build steps ...
 
 # Stage 2: Runtime
@@ -105,7 +105,7 @@ See `templates/docker/Dockerfile-go-cgo` for a complete example.
 
 ```dockerfile
 # Stage 1: Build
-FROM golang:1.25-alpine AS builder
+FROM golang:1.27-alpine AS builder
 RUN apk add --no-cache gcc musl-dev
 # ... build with CGO ...
 
@@ -213,7 +213,7 @@ By default, GHCR images are private. To make public:
 1. **Use specific base image versions:**
 
    ```dockerfile
-   FROM golang:1.25-alpine  # Pin major version
+   FROM golang:1.27-alpine  # Pin major version
    FROM alpine:3.19         # Pin specific version
    ```
 
