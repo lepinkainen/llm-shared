@@ -20,6 +20,9 @@ jobs:
 
       - name: Set up uv
         uses: astral-sh/setup-uv@v10.0.1
+        with:
+          # This repository has no Python project files to key a cache on.
+          enable-cache: false
 
       - name: Update versions.md
         env:

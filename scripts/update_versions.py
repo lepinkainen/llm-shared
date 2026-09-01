@@ -269,13 +269,48 @@ def render_markdown(languages: list[VersionRecord], actions: list[ActionRecord])
     return "\n".join(lines)
 
 
-def write_versions_file(path: str) -> None:
+TIMESTAMP_LINE = re.compile(r"^_Last updated: .*_$")
+
+
+def _without_timestamp(text: str) -> str:
+    """Return text with the generated timestamp line removed.
+
+    Used to decide whether anything of substance changed: the timestamp moves
+    on every run, so comparing raw text would always report a difference.
+    """
+    return "\n".join(
+        line for line in text.splitlines() if not TIMESTAMP_LINE.match(line)
+    )
+
+
+def write_versions_file(path: str, force: bool = False) -> bool:
+    """Refresh the versions table. Returns True if the file was written.
+
+    When nothing but the timestamp would change, the file is left alone.
+    Rewriting it regardless meant the scheduled workflow raised a pull request
+    every week whose entire content was a new timestamp.
+    """
     previous = read_existing_versions(path)
     languages = collect_language_versions(previous)
     actions = collect_action_versions(previous)
-    markdown = render_markdown(languages, actions)
+    markdown = render_markdown(languages, actions) + "\n"
+
+    if not force:
+        try:
+            with open(path, encoding="utf-8") as handle:
+                current = handle.read()
+        except OSError:
+            current = None
+        if current is not None and _without_timestamp(current) == _without_timestamp(
+            markdown
+        ):
+            print(f"No version changes; leaving {path} unchanged.")
+            return False
+
     with open(path, "w", encoding="utf-8") as handle:
-        handle.write(markdown + "\n")
+        handle.write(markdown)
+    print(f"Updated {path}.")
+    return True
 
 
 def _link(label: str, url: str | None) -> str:
@@ -293,13 +328,18 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
         default="versions.md",
         help="Path to versions.md (default: versions.md)",
     )
+    parser.add_argument(
+        "--force",
+        action="store_true",
+        help="Rewrite the file even when only the timestamp would change",
+    )
     return parser.parse_args(argv)
 
 
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv or sys.argv[1:])
     try:
-        write_versions_file(args.output)
+        write_versions_file(args.output, force=args.force)
     except Exception as exc:  # pylint: disable=broad-except
         print(f"Error: {exc}", file=sys.stderr)
         return 1
