@@ -99,6 +99,18 @@ lint:
     - go mod tidy
 ```
 
+Since `lint` rewrites files, never list it in `deps` alongside `test` - Task v3 runs
+deps in parallel, and `go mod tidy` racing `go test` fails with a spurious
+`missing go.sum entry`. Call them in order instead:
+
+```yaml
+build:
+  cmds:
+    - task: lint
+    - task: test
+    - task: build-go
+```
+
 `go fix` mutates source, so scope it to your own packages. When `llm-shared` is
 vendored as a submodule its `utils/` are part of the module, and a bare `./...`
 would rewrite that checked-out submodule and leave it dirty. Exclude it with a

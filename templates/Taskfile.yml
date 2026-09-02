@@ -20,11 +20,13 @@ vars:
       fi
 
 tasks:
-  # Core build task - depends on tests and linting
+  # Sequential, not deps: [test, lint] - Task v3 runs deps in parallel, and lint
+  # rewrites the files test is compiling (goimports -w, go mod tidy, ruff --fix).
   build:
     desc: Build the project
-    deps: [test, lint]
     cmds:
+      - task: lint
+      - task: test
       - task: build-go
       # - task: build-python  # Uncomment for Python projects
       # - task: build-js      # Uncomment for JS/TS projects
@@ -32,11 +34,12 @@ tasks:
   # Linux-specific build
   build-linux:
     desc: Build for Linux
-    deps: [test, lint]
     env:
       GOOS: linux
       GOARCH: amd64
     cmds:
+      - task: lint
+      - task: test
       - task: build-go
 
   # CI build without tests/linting (run separately in CI)
@@ -126,9 +129,10 @@ tasks:
   # Python tasks
   build-python:
     desc: Build Python package artifacts
-    deps: [lint, test]
     silent: true
     cmds:
+      - task: lint
+      - task: test
       - mkdir -p {{.BUILD_DIR}}
       - uv build --wheel --sdist --out-dir {{.BUILD_DIR}} --quiet
 
