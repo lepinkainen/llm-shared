@@ -1,12 +1,12 @@
 # Toolchain Versions
 
-_Last updated: 2026-09-01 07:36 UTC_
+_Last updated: 2026-09-07 08:44 UTC_
 
 ## Languages
 
 | Tool | Latest Version |
 | --- | --- |
-| [Go](https://go.dev/dl/) | 1.27.0 |
+| [Go](https://go.dev/dl/) | 1.27.1 |
 | [Python](https://www.python.org/downloads/) | 3.14.7 |
 | [Tailwind CSS](https://tailwindcss.com) | 4.3.3 |
 | [Node.js](https://nodejs.org/en/download/) | 26.8.1 |
@@ -20,7 +20,7 @@ _Last updated: 2026-09-01 07:36 UTC_
 | [go-task/setup-task](https://github.com/go-task/setup-task) | v2.2.0 |
 | [golangci/golangci-lint-action](https://github.com/golangci/golangci-lint-action) | v9.3.0 |
 | [codecov/codecov-action](https://github.com/codecov/codecov-action) | v7.0.0 |
-| [pnpm/action-setup](https://github.com/pnpm/action-setup) | v6.0.10 |
+| [pnpm/action-setup](https://github.com/pnpm/action-setup) | v6.1.0 |
 | [actions/setup-node](https://github.com/actions/setup-node) | v7.0.0 |
 | [astral-sh/setup-uv](https://github.com/astral-sh/setup-uv) | v10.0.1 |
 | [actions/setup-python](https://github.com/actions/setup-python) | v7.0.0 |
