@@ -4,12 +4,28 @@
 
 My Github repository root is at <https://github.com/lepinkainen/>
 
-- IMPORTANT: NEVER commit to the "main" or "master" branch directly
-- Use feature branches for new features or bug fixes
+- **Match the ceremony to the size of the change.** Every project here has one
+  developer and one user, and they are the same person. There is no review
+  queue to protect and no one waiting on an approval, so branch protection
+  rituals borrowed from team repositories are pure overhead.
+  - **Small, self-contained work goes straight to `main`** — a bug fix, a
+    config tweak, a dependency bump, a doc edit. Branching for a two-line
+    change costs more than it can possibly return.
+  - **Large features and refactors use a feature branch.** The payoff is being
+    able to rework or abandon the whole line of work cleanly, and having a
+    diff worth reading when the change is too big to hold in your head at once.
+  - When in doubt, ask whether you would want to revert this as a unit. If yes,
+    and it is more than a commit or two, branch.
+- Open a pull request when you want **automated** review, not human sign-off.
+  Bot reviewers read the diff of a branch and catch things local lint and tests
+  do not — a single review pass on one branch turned up three real
+  context-handling bugs that `golangci-lint` and a green test suite had both
+  waved through.
+- Whatever the route, `task build` must pass before the commit lands. Committing
+  straight to `main` removes the branch, not the check.
 - Keep commits small and focused
 - Write clear, descriptive commit messages
 - Rebase branches before merging to keep history clean
-- Use pull requests for code reviews and discussions
 - **Commit messages, PR descriptions and review comments are not a
   documentation store.** Not because they get lost, but because nobody reads
   them. Humans read the file they are editing; agents read the files they are
