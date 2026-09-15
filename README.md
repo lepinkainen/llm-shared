@@ -33,6 +33,7 @@ Standardized development guidelines and tools for LLM assistants.
 - `templates/Taskfile.yml` - Comprehensive task runner configuration
 - `templates/gitignore-*` - Language-specific .gitignore files
 - `templates/golangci.yml` - Go linter configuration
+- `templates/airbnb.swiftformat` - SwiftFormat config (Airbnb style guide)
 
 **Tools**: The `utils/` directory contains function analysis tools for code exploration:
 

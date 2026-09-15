@@ -4,12 +4,37 @@
 
 My Github repository root is at <https://github.com/lepinkainen/>
 
-- IMPORTANT: NEVER commit to the "main" or "master" branch directly
-- Use feature branches for new features or bug fixes
+- **Match the ceremony to the size of the change.** Every project here has one
+  developer and one user, and they are the same person. There is no review
+  queue to protect and no one waiting on an approval, so branch protection
+  rituals borrowed from team repositories are pure overhead.
+  - **Small, self-contained work goes straight to `main`** — a bug fix, a
+    config tweak, a dependency bump, a doc edit. Branching for a two-line
+    change costs more than it can possibly return.
+  - **Large features and refactors use a feature branch.** The payoff is being
+    able to rework or abandon the whole line of work cleanly, and having a
+    diff worth reading when the change is too big to hold in your head at once.
+  - When in doubt, ask whether you would want to revert this as a unit. If yes,
+    and it is more than a commit or two, branch.
+- Open a pull request when you want **automated** review, not human sign-off.
+  Bot reviewers read the diff of a branch and catch things local lint and tests
+  do not — a single review pass on one branch turned up three real
+  context-handling bugs that `golangci-lint` and a green test suite had both
+  waved through.
+- Whatever the route, `task build` must pass before the commit lands. Committing
+  straight to `main` removes the branch, not the check.
 - Keep commits small and focused
 - Write clear, descriptive commit messages
 - Rebase branches before merging to keep history clean
-- Use pull requests for code reviews and discussions
+- **Commit messages, PR descriptions and review comments are not a
+  documentation store.** Not because they get lost, but because nobody reads
+  them. Humans read the file they are editing; agents read the files they are
+  handed and grep the tree. Neither goes digging through `git log`, and nobody
+  reopens a months-old review thread to find out why a line is the way it is.
+  Assume anything recorded *only* in a commit message or a PR comment will
+  never be read again. If a future reader needs the reasoning to change the
+  code safely, put it in the code as a comment, or in the project's docs.
+  Commit messages carry the narrative of a change; they are not its record.
 
 ## Project management
 
@@ -68,7 +93,11 @@ go run utils/validate-docs/validate-docs.go --dir /path/to/project
       - go test -tags=ci -cover -v ./...
       - allow skipping tests with //go:build !ci
     - lint
-    - build tasks need to depend on test and lint tasks
+    - build tasks need to run lint and test first — but call them **sequentially
+      from `cmds:`, never via `deps:`**. Task v3 runs deps in parallel, and a
+      lint task that rewrites files (`go mod tidy`, `go fix`, `goimports -w`)
+      racing `go test` fails with a spurious `missing go.sum entry`. See
+      `templates/Taskfile.yml` and `languages/go.md`.
   - All build artefacts should be placed in the `build/` directory if the language builds to a binary
   - Projects should have a basic Github Actions setup that uses the build-ci task to run tests and linting on push and pull requests
   - See `templates/github/workflows/` for CI templates for Go, Python, and JavaScript projects
