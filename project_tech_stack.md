@@ -10,6 +10,15 @@ My Github repository root is at <https://github.com/lepinkainen/>
 - Write clear, descriptive commit messages
 - Rebase branches before merging to keep history clean
 - Use pull requests for code reviews and discussions
+- **Commit messages, PR descriptions and review comments are not a
+  documentation store.** Not because they get lost, but because nobody reads
+  them. Humans read the file they are editing; agents read the files they are
+  handed and grep the tree. Neither goes digging through `git log`, and nobody
+  reopens a months-old review thread to find out why a line is the way it is.
+  Assume anything recorded *only* in a commit message or a PR comment will
+  never be read again. If a future reader needs the reasoning to change the
+  code safely, put it in the code as a comment, or in the project's docs.
+  Commit messages carry the narrative of a change; they are not its record.
 
 ## Project management
 
