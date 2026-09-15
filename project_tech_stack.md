@@ -68,7 +68,11 @@ go run utils/validate-docs/validate-docs.go --dir /path/to/project
       - go test -tags=ci -cover -v ./...
       - allow skipping tests with //go:build !ci
     - lint
-    - build tasks need to depend on test and lint tasks
+    - build tasks need to run lint and test first — but call them **sequentially
+      from `cmds:`, never via `deps:`**. Task v3 runs deps in parallel, and a
+      lint task that rewrites files (`go mod tidy`, `go fix`, `goimports -w`)
+      racing `go test` fails with a spurious `missing go.sum entry`. See
+      `templates/Taskfile.yml` and `languages/go.md`.
   - All build artefacts should be placed in the `build/` directory if the language builds to a binary
   - Projects should have a basic Github Actions setup that uses the build-ci task to run tests and linting on push and pull requests
   - See `templates/github/workflows/` for CI templates for Go, Python, and JavaScript projects
