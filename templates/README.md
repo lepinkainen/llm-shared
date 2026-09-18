@@ -60,10 +60,10 @@ project-name/
 ├── pkg/          # Public library code (Go)
 ├── src/          # Source code (Python/JavaScript)
 ├── tests/        # Test files
-├── docs/         # Documentation
+├── ai-docs/      # Agent-written docs for agents
 ├── build/        # Build artifacts
 ├── Taskfile.yml  # Build automation
-└── README.md     # This file
+└── README.md     # Human-facing: what it is, install, run, dev
 ```
 
 ### Contributing

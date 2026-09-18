@@ -16,6 +16,7 @@ Standardized development guidelines and tools for LLM assistants.
 
 - Refer to `PROJECT.md` (in the project root, not this submodule) for the broad purpose, current state, and intended direction of the project. This file is project-specific and should be the first thing you read to understand what the project is and where it is going.
 - Refer to `project_tech_stack.md` for universal development guidelines (project management, validation, common practices)
+- `project_tech_stack.md` also defines the documentation split: `README.md` is human-only (what it is, install/run, dev setup), everything else goes in `ai-docs/`
 - Refer to `GITHUB.md` for GitHub issue management (creating, reading, and managing issues)
 - Refer to `shell_commands.md` for modern shell tool usage (`rg` instead of `grep`, `fd` instead of `find`)
 - Refer to `docker.md` for Docker deployment patterns (multi-stage builds, GHCR, docker-compose)

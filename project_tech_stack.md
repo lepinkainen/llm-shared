@@ -106,6 +106,33 @@ go run utils/validate-docs/validate-docs.go --dir /path/to/project
   - When doing HTTP requests, use a custom user agent that includes the project name and version, e.g. `MyProject/1.0.0`
   - See `templates/Taskfile.yml` for a comprehensive example template that follows these guidelines
 
+## Documentation
+
+Two audiences, two places. Do not mix them.
+
+- **`README.md` is for humans only.** It contains exactly three things:
+  1. What the project is for
+  2. How to install and run it
+  3. How to run it for development
+
+  That is the whole file. No architecture notes, no design rationale, no API
+  reference, no task lists, no implementation history, no agent instructions.
+  If a human opening the repo for the first time does not need it to use or
+  start hacking on the project, it does not belong in `README.md`.
+
+- **`ai-docs/` is for everything else** — documentation written by LLM agents
+  for LLM agents. Architecture, data flow, module maps, design decisions and
+  their reasoning, API and schema details, investigation notes, migration
+  plans. Written to be grepped and read in fragments, not read end to end.
+  One topic per file, named after the topic (`ai-docs/catalog-layout.md`).
+  Say what is true now; it is a description of the code, not a changelog.
+
+`PROJECT.md` stays where it is: purpose, current state and direction, for both
+audiences.
+
+When documentation drifts, fix it where it lives — do not paste `ai-docs/`
+content back into `README.md` to make it more visible.
+
 ## Docker Deployment
 
 For containerized applications (web services, APIs, long-running daemons):
