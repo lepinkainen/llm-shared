@@ -1,6 +1,6 @@
 # Toolchain Versions
 
-_Last updated: 2026-09-14 09:21 UTC_
+_Last updated: 2026-09-21 09:24 UTC_
 
 ## Languages
 
@@ -9,7 +9,7 @@ _Last updated: 2026-09-14 09:21 UTC_
 | [Go](https://go.dev/dl/) | 1.27.1 |
 | [Python](https://www.python.org/downloads/) | 3.14.7 |
 | [Tailwind CSS](https://tailwindcss.com) | 4.3.3 |
-| [Node.js](https://nodejs.org/en/download/) | 26.8.2 |
+| [Node.js](https://nodejs.org/en/download/) | 26.9.0 |
 
 ## GitHub Actions
 
@@ -19,7 +19,7 @@ _Last updated: 2026-09-14 09:21 UTC_
 | [actions/setup-go](https://github.com/actions/setup-go) | v7.0.0 |
 | [go-task/setup-task](https://github.com/go-task/setup-task) | v2.2.0 |
 | [golangci/golangci-lint-action](https://github.com/golangci/golangci-lint-action) | v9.3.0 |
-| [codecov/codecov-action](https://github.com/codecov/codecov-action) | v7.0.0 |
+| [codecov/codecov-action](https://github.com/codecov/codecov-action) | v7.1.1 |
 | [pnpm/action-setup](https://github.com/pnpm/action-setup) | v6.1.0 |
 | [actions/setup-node](https://github.com/actions/setup-node) | v7.0.0 |
 | [astral-sh/setup-uv](https://github.com/astral-sh/setup-uv) | v10.1.0 |
